@@ -1,6 +1,7 @@
 # run main models
 import torch
 
+# checking devices
 device = None
 if torch.cuda.is_available():
     print("Cuda is available, using CUDA")
