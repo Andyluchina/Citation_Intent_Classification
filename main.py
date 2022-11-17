@@ -1,5 +1,6 @@
 # run main models
 import torch
+import json
 
 # checking devices
 device = None
@@ -14,3 +15,14 @@ else:
     device = torch.device('cpu')
 
 # print(device)
+# load data
+ACL_TRAIN_PATH = './ACL-ARC/training.jsonl'
+data = []
+
+f = open(ACL_TRAIN_PATH, "r")
+
+for x in f:
+  y = json.loads(x)
+  data.append(y)
+
+print(len(data))
