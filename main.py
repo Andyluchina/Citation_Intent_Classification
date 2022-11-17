@@ -24,5 +24,3 @@ f = open(ACL_TRAIN_PATH, "r")
 for x in f:
   y = json.loads(x)
   data.append(y)
-
-print(len(data))
