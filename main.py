@@ -16,7 +16,7 @@ else:
 
 # print(device)
 # load data
-ACL_TRAIN_PATH = './ACL-ARC/training.jsonl'
+ACL_TRAIN_PATH = './acl-arc/train.jsonl'
 data = []
 
 f = open(ACL_TRAIN_PATH, "r")
@@ -24,5 +24,11 @@ f = open(ACL_TRAIN_PATH, "r")
 for x in f:
   y = json.loads(x)
   data.append(y)
-  print(y['cur_sent'])
+  print(y['text'])
   break
+print(len(data))
+
+from torchtext.vocab import GloVe, vocab
+import torchtext
+
+glove_vectors = GloVe("6B", dim = 100)
