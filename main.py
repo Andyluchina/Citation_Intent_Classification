@@ -1,6 +1,10 @@
 # run main models
 import torch
 import json
+import numpy as np
+from data_preprocessing import *
+
+
 
 # checking devices
 device = None
@@ -14,9 +18,11 @@ else:
     print("No acceleration device detected, using CPU")
     device = torch.device('cpu')
 
-# print(device)
+print(device)
+
+
 # load data
-ACL_TRAIN_PATH = './acl-arc/train.jsonl'
+ACL_TRAIN_PATH = './ACL-ARC/train.jsonl'
 data = []
 
 f = open(ACL_TRAIN_PATH, "r")
@@ -24,11 +30,10 @@ f = open(ACL_TRAIN_PATH, "r")
 for x in f:
   y = json.loads(x)
   data.append(y)
-  print(y['text'])
-  break
-print(len(data))
 
-from torchtext.vocab import GloVe, vocab
-import torchtext
+# processed_data = data_preprocessing.filter(data)
 
-glove_vectors = GloVe("6B", dim = 100)
+for key, value in data[0].items():
+    print(key,': ', value,'\n\n')
+
+
