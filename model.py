@@ -41,7 +41,7 @@ class CustomTransformerClassifier(nn.Module):
     self.input_projection = nn.Linear(enbedding_glove.shape[1], d_model)
     self.output_linear = nn.Linear(MAXLEN*d_model,output_class_num)
     self.logsoftmax = nn.LogSoftmax(dim=1)
-  def forward(self, sentence,src_mask = None,section_name = None):
+  def forward(self, sentence,src_key_padding_mask = None,section_name = None):
     """
     args:
       sentence: [seq_len x batch_size] token indices
@@ -53,7 +53,7 @@ class CustomTransformerClassifier(nn.Module):
     embedded_sentence = self.input_projection(self.embedder(sentence))
     pos_emb = self.pos_encoder(embedded_sentence)
     # trans: seq_len x batch_size x d_model
-    trans = self.transformer_encoder(pos_emb, src_mask)
+    trans = self.transformer_encoder(pos_emb, src_key_padding_mask = src_key_padding_mask)
     trans_permute = torch.permute(trans, (1, 0, 2))
     trans_flatten = torch.Flatten(trans_permute)
     trans_output = self.output_linear(trans_flatten)
