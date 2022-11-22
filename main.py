@@ -40,10 +40,10 @@ train_data, test_data, dev_data = load_data(ACL_TRAIN_PATH), load_data(ACL_TEST_
 
 
 
-# train = Process(train_data).make()
+train = Process(train_data).make()
 
 # dev = Process(dev_data).make()
-test = Process(test_data).make()
+# test = Process(test_data).make()
 
 
 # for j,(x_train,y_train) in enumerate(x):

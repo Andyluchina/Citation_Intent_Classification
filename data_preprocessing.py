@@ -96,50 +96,13 @@ from torchtext.vocab import GloVe
 
 
 
-def make_data_loader(data:list, batch_size:int=1):
-
-    # filtered_data = filter(data, kept_key)
-
-
-    # input_count = make_input_counter(filtered_data, 'text')
-
-    # glove_vectors = GloVe(name="6B", dim=100)
-    # glove_pretrained, input_types, input_types2idx = apply_glove(input_count, glove_vectors, mfreq=1) # apply glove to input x
-
-
-    # output_count = make_output_counter(filtered_data)
-
-    # output_types, output_types2idx = counts_to_vocab(output_count)
-
-
-
-    # x_indexed, y_indexed = index_data(filtered_data, input_types2idx, output_types2idx)
-
-
-
-    padded_x, mask, padding_idx = pad_input(x_indexed)
-
-
-    # train_data = dataset(padded_x, y_indexed, mask)
-
-    # data_loader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle=True)
-
-    # for j,(x_train,y_train) in enumerate(x):
-    #     print(j,(x_train,y_train))
-    #     break
-
-    # return data_loader
-
-
-
-
-
 class Process:
 
-    def __init__(self, data:list[dict], input_key:str='text', min_freq:int=1, 
-    max_len:int=250, batch_size:int=1, shuffle:bool=True, glove_name:str="6B",glove_dim:int=100):
+    def __init__(self, data:list[dict], input_key:str='text', min_freq:int=1, max_len:int=250, 
+    batch_size:int=1, shuffle:bool=True, glove_name:str="6B",glove_dim:int=100):
 
         self.data = data
+        self.num_example = len(data)
 
     # all the dinctionary keys in data:
 
@@ -147,13 +110,16 @@ class Process:
     # 'citing_author_ids', 'extended_context', 'section_number', 'section_title', 'intent', 'cite_marker_offset', 'sents_before', 'sents_after', 
     # 'cleaned_cite_text', 'citation_id', 'citation_excerpt_index', 'section_name']
 
-    # relevant keys ['text','extended_context','intent','cleaned_cite_text','section_name']
+    # relevant keys: ['text','extended_context','intent','cleaned_cite_text','section_name']
 
         self.input_key = input_key
         self.input_word_counter = Counter()
         self.input_types = []
         self.input_types2idx = {}
         self.indexed_input = []
+        self.padded_input = None
+        self.mask = None
+        self.padding_idx = None
 
         self.output_key = 'intent'
         self.output_word_counter = Counter()
@@ -166,35 +132,40 @@ class Process:
 
         self.batch_size = batch_size
         self.shuffle = shuffle
+        self.dataset = None
+        self.data_loader = None
 
         self.glove_vectors = GloVe(name=glove_name, dim=glove_dim)
         self.pretrained_embedding = None
+        self.V = None
 
 
 
-    # def filter(self):
-    #     return [{key: value for (key, value) in sample.items() if key in self.kept_key} for sample in self.data]
-
-
-    def make_input_counter(self):
+    def make_counters(self):
         for example in self.data:
             self.input_word_counter.update(self.split(example[self.input_key].lower()))
+            self.output_word_counter.update([example[self.output_key]])
+
+
+    # def make_input_counter(self):
+    #     for example in self.data:
+    #         self.input_word_counter.update(self.split(example[self.input_key].lower()))
 
     
-    def make_output_counter(self):
-        for example in self.data:
-            self.output_word_counter.update([example[self.output_key]])
+    # def make_output_counter(self):
+    #     for example in self.data:
+    #         self.output_word_counter.update([example[self.output_key]])
 
 
 
     def split(self, x:str):
         splitted = re.split(' |-', x) # split by space and dash
-        out = [w[:4] if (len(w)==5 and w[:4].isnumeric()) else w for w in splitted] # year_modified 1997a -> 1997
+        out = [w[:4] if (len(w)==5 and w[:4].isnumeric()) else w for w in splitted] # modify some year-related 1997a -> 1997
         return out
 
 
 
-    def apply_glove(self):
+    def build_input_vocab(self):
 
         # initialize with UNK
         self.pretrained_embedding = self.glove_vectors.get_vecs_by_tokens("<UNK>").view(1,-1)
@@ -204,17 +175,18 @@ class Process:
         for key, count in self.input_word_counter.items():
             vec = self.glove_vectors.get_vecs_by_tokens(key)
             if any([ele != 0 for ele in vec]) and count >= self.min_freq:
-                pretrained_embedding = torch.cat((pretrained_embedding, vec.view(1,-1)),0)
+                self.pretrained_embedding = torch.cat((self.pretrained_embedding, vec.view(1,-1)),0)
                 self.input_types.append(key)
 
         # embedding for unknow is avg of all other word embedding
-        pretrained_embedding[0,:] = torch.sum(pretrained_embedding[1:,:],0).div(pretrained_embedding.shape[0]-1)
+        self.V = self.pretrained_embedding.shape[0]
+        self.pretrained_embedding[0,:] = torch.sum(self.pretrained_embedding[1:,:],0).div(self.V-1)
 
-        self.input_types2idx = {word: i for i, word in enumerate(self.input_types)}
+        self.input_types2idx = {w: i for i, w in enumerate(self.input_types)}
 
 
 
-    def counts_to_vocab(self): 
+    def build_output_vocab(self): 
         self.output_types = [wtype for (wtype, wcount) in self.output_word_counter.most_common() if wcount >= self.min_freq]
         self.output_types2idx = {wtype: i for i, wtype in enumerate(self.output_types)}
 
@@ -229,33 +201,32 @@ class Process:
             self.indexed_output.append(self.output_types2idx[y])
 
 
-    def input_padding(self): # need change!!!!! self.max_len=250
-        # padded_input = pad_sequence(self.indexed_input).T # make batch first, then max length
-        # max_len = padded_input.shape[1]
-        # mask, padding_idx = [], []
-        # for example in self.indexed_input:
-        #     mask.append(torch.ones_like(example))
-        #     padding_idx.append(torch.tensor([i for i in range(len(example), max_len)]))
 
-        # mask = pad_sequence(mask).T
-        # return padded_input, mask, padding_idx # (batch, max_len), (batch, max_len), (batch, various_len)
+    def input_padding(self):
 
-        self.padded_input
-
-
+        self.padded_input = torch.zeros(self.num_example, self.max_len) # (#ofsamples, max_len)
+        self.mask = torch.ones_like(self.padded_input) # (#ofsamples, max_len)
+        self.padding_idx = []  # (#ofsamples, various length)
+        for i, example in enumerate(self.indexed_input):
+            example = example[:self.max_len]
+            l = len(example)
+            self.padded_input[i,:l] = example
+            self.mask[i,l:] = 0
+            self.padding_idx.append(torch.tensor([k for k in range(l, self.max_len)]))
 
 
 
     def make(self): # call above class functions to generate things, like a script
 
-        self.make_input_counter()
-        self.apply_glove()
-        self.make_output_counter()
-        self.counts_to_vocab()
+        self.make_counters()
+        # self.make_input_counter()
+        self.build_input_vocab()
+        # self.make_output_counter()
+        self.build_output_vocab()
         self.index_data()
         self.input_padding()
 
-        self.dataset = Dataset(padded_x, y_indexed, mask)
+        self.dataset = Dataset(self.padded_input, self.indexed_output, self.mask)
         self.data_loader = torch.utils.data.DataLoader(self.dataset, batch_size=self.batch_size, shuffle=self.shuffle)
 
 
