@@ -24,8 +24,8 @@ print(device)
 
 
 
-# load data
 def load_data(path):
+
     data = []
     for x in open(path, "r"):
         data.append(json.loads(x))
@@ -43,17 +43,15 @@ train_data, test_data, dev_data = load_data(ACL_TRAIN_PATH), load_data(ACL_TEST_
 
 
 
-# create a class to process and hold attributes
+# create a class to process data and hold attributes
 train = Process(train_data, shuffle=False, batch_size=2)
 
 
 
-# for j, (x_train, mask, y_train) in enumerate(train.data_loader):
-#     # print(j,(x_train,mask, y_train))
-#     print(np.take(train.input_types, x_train))
-#     break
-
-
+for j, (x_train, mask, y_train) in enumerate(train.data_loader):
+    # print(j,(x_train,mask, y_train))
+    print(np.take(train.input_types, x_train))
+    break
 
 
 
