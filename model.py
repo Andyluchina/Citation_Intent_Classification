@@ -13,7 +13,7 @@ class CustomBertClassifier(nn.Module):
         """
         super(CustomBertClassifier, self).__init__()
         self.dropout = nn.Dropout(p=0.2)
-        self.linear1 = nn.Linear(bert_dim_size, hidden_dim)
+        self.linear1 = nn.Linear(2*bert_dim_size, hidden_dim)
         self.linear2 = nn.Linear(hidden_dim, hidden_dim)
         self.linear3 = nn.Linear(hidden_dim, num_of_output)
         # self.bert_model = model
@@ -43,10 +43,10 @@ class CustomBertClassifier(nn.Module):
         # print(first_tokens.shape)
         # print(citation_tokens.shape)
         # first_tokens batch X bert_dim_size
-        # concat_tokens = torch.concat((first_tokens, citation_tokens), dim=1)
-        concat_tokens = citation_tokens
+        concat_tokens = torch.concat((first_tokens, citation_tokens), dim=1)
+        # concat_tokens = citation_tokens
         # concat_tokens batch X 2*bert_dim_size
-        x1 = self.dropout(concat_tokens)
+        x1 = concat_tokens
         x2 = self.dropout(self.relu(self.linear1(x1)))
         x3 = self.linear2(x2)
         x4 = self.linear3(x3)
