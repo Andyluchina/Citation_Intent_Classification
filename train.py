@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-import tqdm
+from tqdm import tqdm
 from torchmetrics import F1Score
 from model import CustomBertClassifier
 from data_preprocessing import bert_process
@@ -58,24 +58,25 @@ optimizer = torch.optim.Adam(network.parameters())
 n_epochs = 60
 
 def evaluate_model(network, data):
-    x, y = data
-    network.eval()
-    y = y.to(device)
-    sentences, citation_idxs, mask = x
-    sentences, citation_idxs, mask = sentences.to(device), citation_idxs.to(device), mask.to(device)
-    output = network(sentences, citation_idxs, mask, device=device)
-    loss = loss_fn(output, y)
-    _, predicted = torch.max(output, dim=1)
-    f1 = F1Score(num_classes=num_of_output)
-    f1 = f1(predicted, y)
-    print("Loss : %f, f1 : %f \n" % (loss, f1))
-    return f1
+    for batch in data:
+        x, y = data
+        network.eval()
+        y = y.to(device)
+        sentences, citation_idxs, mask = x
+        sentences, citation_idxs, mask = sentences.to(device), citation_idxs.to(device), mask.to(device)
+        output = network(sentences, citation_idxs, mask, device=device)
+        loss = loss_fn(output, y)
+        _, predicted = torch.max(output, dim=1)
+        f1 = F1Score(num_classes=num_of_output)
+        f1 = f1(predicted, y)
+        print("Loss : %f, f1 : %f \n" % (loss, f1))
+        return f1
 
 best_f1 = -1
 curr_f1 = -1
 for epoch in range(n_epochs):
     print('Epoch', epoch)
-    for batch in tqdm.tqdm_notebook(train_loader, leave=False):
+    for batch in tqdm(train_loader):
         x, y = batch
         network.train()
         assert network.training, 'make sure your network is in train mode with `.train()`'
@@ -92,15 +93,15 @@ for epoch in range(n_epochs):
         optimizer.step()
     network.eval()
     print("dev loss and f1")
-    curr_f1 = evaluate_model(network, dev)
+    curr_f1 = evaluate_model(network, dev_loader)
     if curr_f1 > best_f1:
         best_f1 = curr_f1
         torch.save(network.state_dict(), "bestmodel.npy")
     print("test loss and f1")
-    evaluate_model(network, test)
+    evaluate_model(network, test_loader)
 
 network.load_state_dict(torch.load("bestmodel.npy"))
 print("The best dev f1 is ", best_f1)
 network.eval()
 print("The test f1 is")
-evaluate_model(network, test)
+evaluate_model(network, test_loader)
