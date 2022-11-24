@@ -31,9 +31,9 @@ def load_data(path):
     return data
 
 
-ACL_TRAIN_PATH = './ACL-ARC/train.jsonl'
-ACL_TEST_PATH = './ACL-ARC/test.jsonl'
-ACL_DEV_PATH = './ACL-ARC/dev.jsonl'
+ACL_TRAIN_PATH = './acl-arc/train.jsonl'
+ACL_TEST_PATH = './acl-arc/test.jsonl'
+ACL_DEV_PATH = './acl-arc/dev.jsonl'
 
 train_data, test_data, dev_data = load_data(ACL_TRAIN_PATH), load_data(ACL_TEST_PATH), load_data(ACL_DEV_PATH)
 
