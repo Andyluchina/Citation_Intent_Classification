@@ -1,39 +1,48 @@
-# model code
-class TransformerEncoder(nn.Module):
-  def __init__(self, enbedding_glove, dim_feedforward=512, head=8, num_layers=6, dropout=0.2, d_model=256):
-    """
-    args:
-      hidden_dim: hidden state size of LSTM
-      dropout: this is applied to the output of the LSTM
-    """
-    ### Please do not change this function at all.
-    super(RNNEncoder, self).__init__()
-    self.dropout = nn.Dropout(dropout)
-    # Embedding table over input vocabulary
-    self.embedder = nn.Embedding.from_pretrained(enbedding_glove,freeze = False)
-    encoder_layer = nn.TransformerEncoderLayer(d_model=d_model,dropout=dropout,dim_feedforward=dim_feedforward, nhead=head)
-    self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+from torch import nn, Tensor
+import torch
+import math
+from transformers import BertModel
 
-  def forward(self, sentence):
-    """
-    args:
-      sentence: [seq_len x batch_size] token indices (in our case batch_size = 1)
 
-    returns:
-      lstm_out: [seq_len x batch_size x 2 * hidden_dim] (2 since bidirectional)
-      h_n, c_n: [1 x batch_size x hidden_dim] final states to be passed to the decoder
-    """
-    seq_len, batch_size = sentence.size()
+model = BertModel.from_pretrained("bert-large-uncased")
 
-    # embedded_sentence: seq_len x batch_size x word_vector_dim
-    embedded_sentence = self.embedder(sentence)
+class CustomBertClassifier(nn.Module):
+    def __init__(self, hidden_dim= 200, bert_dim_size=768, num_of_output=6):
+        """
 
-    # lstm_out: seq_len x batch_size x 2 * hidden_dim
-    # h_n, c_n: 2 x batch_size x hidden_dim
-    lstm_out, (h_n, c_n) = self.lstm(embedded_sentence)
-
-    # Take average of states across forward and reverse directions.
-    h_n = h_n.mean(0, keepdim=True)
-    c_n = c_n.mean(0, keepdim=True)
-
-    return self.dropout(lstm_out), (h_n, c_n)
+        """
+        super(CustomBertClassifier, self).__init__()
+        self.dropout = nn.Dropout(p=0.2)
+        self.linear1 = nn.Linear(2*bert_dim_size, hidden_dim)
+        self.linear2 = nn.Linear(hidden_dim, hidden_dim)
+        self.linear3 = nn.Linear(hidden_dim, num_of_output)
+        # self.bert_model = model
+        self.relu = nn.ReLU()
+        self.logsoftmax = nn.LogSoftmax(dim=1)
+        
+    def forward(self, sentences, citation_idxs, mask, bert=model, device="mps"):
+        """
+        args:
+            sentences: batch X seq_len
+            citation_idxs: batch
+            mask: batch X seq_len
+        return:
+            log_probs: batch X num_of_output
+        """
+        bert.to(device)
+        bert_output = bert(input_ids=sentences, encoder_attention_mask=mask)
+        # bert_output: batch X seq_len X bert_dim_size
+        bert_output = bert_output[0]
+        first_tokens = bert_output[:, 0]
+        citation_tokens = bert_output[:, citation_idxs]
+        print(first_tokens.shape)
+        print(citation_tokens.shape)
+        # first_tokens batch X bert_dim_size
+        concat_tokens = torch.concat((first_tokens, citation_tokens), dim=1)
+        # concat_tokens batch X 2*bert_dim_size
+        x1 = self.dropout(concat_tokens)
+        x2 = self.dropout(self.relu(self.linear1(x1)))
+        x3 = self.linear2(x2)
+        x4 = self.linear3(x3)
+        x5 = self.logsoftmax(x4)
+        return x5
