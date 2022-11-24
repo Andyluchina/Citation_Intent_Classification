@@ -4,7 +4,7 @@ import math
 from transformers import BertModel
 
 
-model = BertModel.from_pretrained("bert-large-uncased")
+model = BertModel.from_pretrained("bert-base-uncased")
 
 class CustomBertClassifier(nn.Module):
     def __init__(self, hidden_dim= 200, bert_dim_size=768, num_of_output=6):

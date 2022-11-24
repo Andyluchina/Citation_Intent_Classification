@@ -40,13 +40,13 @@ train_data, test_data, dev_data = load_data(ACL_TRAIN_PATH), load_data(ACL_TEST_
 
 
 
-train = bert_process(train_data, batch_size=64)
+train = bert_process(train_data, batch_size=64, pretrained_model_name='bert-base-uncased')
 train_loader = train.data_loader
 
-dev = bert_process(dev_data, batch_size=len(dev_data))
+dev = bert_process(dev_data, batch_size=len(dev_data), pretrained_model_name='bert-base-uncased')
 dev_loader = dev.data_loader
 
-test = bert_process(test_data, batch_size=len(test_data))
+test = bert_process(test_data, batch_size=len(test_data), pretrained_model_name='bert-base-uncased')
 test_loader = test.data_loader
 
 num_of_output = 6
