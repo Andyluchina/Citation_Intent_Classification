@@ -44,7 +44,7 @@ class CustomBertClassifier(nn.Module):
         # print(citation_tokens.shape)
         # first_tokens batch X bert_dim_size
         # concat_tokens = torch.concat((first_tokens, citation_tokens), dim=1)
-        concat_tokens = first_tokens
+        concat_tokens = citation_tokens
         # concat_tokens batch X 2*bert_dim_size
         x1 = self.dropout(concat_tokens)
         x2 = self.dropout(self.relu(self.linear1(x1)))
