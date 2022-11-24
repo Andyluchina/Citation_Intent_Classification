@@ -4,10 +4,10 @@ import math
 from transformers import BertModel
 
 
-model = BertModel.from_pretrained("bert-base-uncased")
+
 
 class CustomBertClassifier(nn.Module):
-    def __init__(self, hidden_dim= 200, bert_dim_size=768, num_of_output=6):
+    def __init__(self, hidden_dim= 200, bert_dim_size=768, num_of_output=6, model_name = "bert-base-uncased"):
         """
 
         """
@@ -19,8 +19,11 @@ class CustomBertClassifier(nn.Module):
         # self.bert_model = model
         self.relu = nn.ReLU()
         self.logsoftmax = nn.LogSoftmax(dim=1)
+        self.model = BertModel.from_pretrained(model_name)
+        for param in self.model.bert.parameters():
+            param.requires_grad = False
         
-    def forward(self, sentences, citation_idxs, mask, bert=model, device="mps"):
+    def forward(self, sentences, citation_idxs, mask, device="mps"):
         """
         args:
             sentences: batch X seq_len
@@ -29,8 +32,8 @@ class CustomBertClassifier(nn.Module):
         return:
             log_probs: batch X num_of_output
         """
-        bert.to(device)
-        bert_output = bert(input_ids=sentences, encoder_attention_mask=mask)
+        # bert.to(device)
+        bert_output = self.model(input_ids=sentences, encoder_attention_mask=mask)
         # print(len(bert_output))
         # bert_output: batch X seq_len X bert_dim_size
         # print(bert_output[0].shape)
