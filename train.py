@@ -5,7 +5,7 @@ from torchmetrics import F1Score
 from model import CustomBertClassifier
 from data_preprocessing import bert_process
 import json
-
+import numpy as np
 
 
 # checking devices
@@ -37,16 +37,16 @@ ACL_DEV_PATH = './ACL-ARC/dev.jsonl'
 
 train_data, test_data, dev_data = load_data(ACL_TRAIN_PATH), load_data(ACL_TEST_PATH), load_data(ACL_DEV_PATH)
 
+# train_data, test_data, dev_data = train_data[:40], test_data, dev_data
 
 
-
-train = bert_process(train_data, batch_size=64, pretrained_model_name='bert-base-uncased')
+train = bert_process(train_data, batch_size=20, pretrained_model_name='bert-base-uncased')
 train_loader = train.data_loader
 
-dev = bert_process(dev_data, batch_size=len(dev_data), pretrained_model_name='bert-base-uncased')
+dev = bert_process(dev_data, batch_size=20, pretrained_model_name='bert-base-uncased')
 dev_loader = dev.data_loader
 
-test = bert_process(test_data, batch_size=len(test_data), pretrained_model_name='bert-base-uncased')
+test = bert_process(test_data, batch_size=20, pretrained_model_name='bert-base-uncased')
 test_loader = test.data_loader
 
 num_of_output = 6
@@ -58,8 +58,11 @@ optimizer = torch.optim.Adam(network.parameters())
 n_epochs = 60
 
 def evaluate_model(network, data):
-    for batch in data:
-        x, y = data
+    batch_size = 0
+    f1s = []
+    losses = []
+    for batch in tqdm(data):
+        x, y = batch
         network.eval()
         y = y.to(device)
         sentences, citation_idxs, mask = x
@@ -67,10 +70,16 @@ def evaluate_model(network, data):
         output = network(sentences, citation_idxs, mask, device=device)
         loss = loss_fn(output, y)
         _, predicted = torch.max(output, dim=1)
-        f1 = F1Score(num_classes=num_of_output)
+        f1 = F1Score(num_classes=num_of_output).to(device)
         f1 = f1(predicted, y)
-        print("Loss : %f, f1 : %f \n" % (loss, f1))
-        return f1
+        f1s.append(f1.cpu().detach().numpy())
+        losses.append(loss.cpu().detach().numpy())
+    f1s = np.asarray(f1s)
+    f1 = f1s.mean()
+    losses = np.asarray(losses)
+    loss = losses.mean()
+    print("Loss : %f, f1 : %f" % (loss, f1))
+    return f1
 
 best_f1 = -1
 curr_f1 = -1
@@ -81,6 +90,7 @@ for epoch in range(n_epochs):
         network.train()
         assert network.training, 'make sure your network is in train mode with `.train()`'
         optimizer.zero_grad()
+        network.to(device)
         y = y.to(device)
         sentences, citation_idxs, mask = x
         sentences, citation_idxs, mask = sentences.to(device), citation_idxs.to(device), mask.to(device)

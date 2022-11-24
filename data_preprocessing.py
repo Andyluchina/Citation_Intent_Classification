@@ -75,6 +75,7 @@ class bert_process:
 
 
 
+
     def index_output(self):
         c = 0
         self.indexed_output = []
@@ -111,7 +112,7 @@ class Dataset:
         self.mask = mask
 
     def __getitem__(self, idx):
-        return (self.x[idx], self.pos, self.mask[idx]), self.y[idx]
+        return (self.x[idx], self.pos[idx], self.mask[idx]), self.y[idx]
 
     def __len__(self):
         return len(self.x)
