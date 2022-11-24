@@ -1,3 +1,5 @@
 ACL-ARC/
 scicite/
 .vector_cache
+__pycache__/
+.vscode
