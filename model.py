@@ -31,10 +31,10 @@ class CustomBertClassifier(nn.Module):
         """
         bert.to(device)
         bert_output = bert(input_ids=sentences, encoder_attention_mask=mask)
-        print(len(bert_output))
+        # print(len(bert_output))
         # bert_output: batch X seq_len X bert_dim_size
         bert_output = bert_output[0]
-        print(bert_output.shape)
+        # print(bert_output.shape)
         first_tokens = bert_output[:, 0]
         # print(citation_idxs)
         citation_tokens = bert_output[torch.arange(bert_output.shape[0]), citation_idxs]
