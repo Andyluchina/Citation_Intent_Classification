@@ -7,7 +7,7 @@ from transformers import BertModel
 
 
 class CustomBertClassifier(nn.Module):
-    def __init__(self, hidden_dim= 200, bert_dim_size=768, num_of_output=6, model_name = "bert-base-uncased"):
+    def __init__(self, hidden_dim= 200, bert_dim_size=768, num_of_output=6, lstm_hidden = 200, model_name = "bert-base-uncased"):
         """
 
         """
@@ -20,9 +20,10 @@ class CustomBertClassifier(nn.Module):
         self.relu = nn.ReLU()
         self.logsoftmax = nn.LogSoftmax(dim=1)
         self.model = BertModel.from_pretrained(model_name)
-        for param in self.model.bert.parameters():
-            param.requires_grad = False
-        
+        for name, param in self.model.named_parameters():
+            if 'classifier' not in name: # classifier layer
+                param.requires_grad = False
+        self.lstm = nn.LSTM(input_size=bert_dim_size, hidden_size=lstm_hidden)
     def forward(self, sentences, citation_idxs, mask, device="mps"):
         """
         args:
