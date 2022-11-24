@@ -52,7 +52,7 @@ test_loader = test.data_loader
 num_of_output = 6
 
 
-network = CustomBertClassifier(hidden_dim= 200, bert_dim_size=768, num_of_output=6)
+network = CustomBertClassifier(hidden_dim= 200, bert_dim_size=1024, num_of_output=6)
 loss_fn = nn.NLLLoss()
 optimizer = torch.optim.Adam(network.parameters())
 n_epochs = 60
