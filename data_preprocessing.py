@@ -33,6 +33,7 @@ indexed_tokens = tokenizer.convert_tokens_to_ids(encoded_input)
 
 
 class bert_process:
+
     def __init__(self, data:list[dict], max_len:int=300, batch_size:int=1, shuffle:bool=True, pretrained_model_name:str='bert-large-uncased', padding:str='max_length'):
         
         self.data = data
@@ -83,7 +84,7 @@ class bert_process:
 
 
     def make_data_loader(self):
-        dataset = Dataset(self.indexed_input, self.indexed_output, self.mask)
+        dataset = Dataset(self.indexed_input, self.cite_pos, self.indexed_output, self.mask)
         self.data_loader = torch.utils.data.DataLoader(dataset, batch_size=self.batch_size, shuffle=self.shuffle)
 
 
@@ -93,16 +94,17 @@ class bert_process:
 
 class Dataset:
 
-    def __init__(self, x, y, mask):
+    def __init__(self, x, pos, y, mask):
         # self.x = torch.tensor(x,dtype=torch.float32)
         # self.y = torch.tensor(y,dtype=torch.float32)
         # self.mask = torch.tensor(mask,dtype=torch.int32)
         self.x = x
         self.y = y
+        self.pos = pos
         self.mask = mask
 
     def __getitem__(self, idx):
-        return self.x[idx], self.mask[idx], self.y[idx]
+        return (self.x[idx], self.pos, self.mask[idx]), self.y[idx]
 
     def __len__(self):
         return len(self.x)

@@ -3,6 +3,9 @@ import torch.nn as nn
 import tqdm
 from torchmetrics import F1Score
 from model import CustomBertClassifier
+from data_preprocessing import bert_process
+import json
+
 
 
 # checking devices
@@ -20,9 +23,32 @@ else:
 
 
 
-train_loader = 1
-dev = 2
-test = 3
+def load_data(path):
+
+    data = []
+    for x in open(path, "r"):
+        data.append(json.loads(x))
+    return data
+
+
+ACL_TRAIN_PATH = './ACL-ARC/train.jsonl'
+ACL_TEST_PATH = './ACL-ARC/test.jsonl'
+ACL_DEV_PATH = './ACL-ARC/dev.jsonl'
+
+train_data, test_data, dev_data = load_data(ACL_TRAIN_PATH), load_data(ACL_TEST_PATH), load_data(ACL_DEV_PATH)
+
+
+
+
+train = bert_process(train_data, batch_size=64)
+train_loader = train.data_loader
+
+dev = bert_process(dev_data, batch_size=len(dev_data))
+dev_loader = dev.data_loader
+
+test = bert_process(test_data, batch_size=len(test_data))
+test_loader = test.data_loader
+
 num_of_output = 6
 
 
