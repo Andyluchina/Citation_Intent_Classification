@@ -65,7 +65,7 @@ class bert_process:
         encoded_input = self.tokenizer(raw_input, padding=self.padding, max_length=self.max_len) # dict
         self.indexed_input = np.array(encoded_input['input_ids'])
         self.mask = np.array(encoded_input['attention_mask'])
-        self.cite_pos = [x.index(self.citation_id) for x in self.encoded_input['input_ids']]
+        self.cite_pos = [x.index(self.citation_id) for x in encoded_input['input_ids']]
 
 
     def index_output(self):
