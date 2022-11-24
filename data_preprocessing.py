@@ -13,20 +13,20 @@ from transformers import BertTokenizer, BertModel
 
 
 
-tokenizer = BertTokenizer.from_pretrained('bert-large-uncased')
-# model = BertModel.from_pretrained('bert-large-uncased')
+# tokenizer = BertTokenizer.from_pretrained('bert-large-uncased')
+# # model = BertModel.from_pretrained('bert-large-uncased')
 
-# text='CITATION'
-# text = "Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well ."
-text = ["Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well .",
-"Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well ."]
+# # text='CITATION'
+# # text = "Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well ."
+# text = ["Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well .",
+# "Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well ."]
 
-encoded_input = tokenizer(text, padding='max_length', max_length=100)
-for key,val in encoded_input.items():
-    print(key,val)
+# encoded_input = tokenizer(text, padding='max_length', max_length=100)
+# for key,val in encoded_input.items():
+#     print(key,val)
 
-# Convert token to vocabulary indices
-indexed_tokens = tokenizer.convert_tokens_to_ids(encoded_input)
+# # Convert token to vocabulary indices
+# indexed_tokens = tokenizer.convert_tokens_to_ids(encoded_input)
 # print(indexed_tokens)
 
 
@@ -62,10 +62,17 @@ class bert_process:
             raw_input.append('section name : {} [SEP] sentence: {}'.format(section_name, text))
 
         # input
-        encoded_input = self.tokenizer(raw_input, padding=self.padding, max_length=self.max_len) # dict
-        self.indexed_input = np.array(encoded_input['input_ids'])
-        self.mask = np.array(encoded_input['attention_mask'])
-        self.cite_pos = [x.index(self.citation_id) for x in encoded_input['input_ids']]
+        encoded_input = self.tokenizer(raw_input, padding=self.padding, max_length=self.max_len, return_tensors='pt') # dict
+        self.indexed_input = encoded_input['input_ids']
+        self.mask = encoded_input['attention_mask']
+        
+        self.cite_pos = []
+        for i, row in enumerate(encoded_input['input_ids']):
+            for j,ele in enumerate(row):
+                if ele == torch.tensor(self.citation_id):
+                    self.cite_pos.append(j)
+        self.cite_pos = torch.tensor(self.cite_pos)
+
 
 
     def index_output(self):
