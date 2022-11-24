@@ -11,3 +11,12 @@ ACL ARC dataset size
 train: 1688
 dev: 114
 test: 139
+To reinstall Nvidia driver (if needed) run:
+sudo /opt/deeplearning/install-driver.sh
+
+nvidia-smi
+git clone https://github.com/Andyluchina/Citation_Intent_Classification
+pip install -r requirements.txt
+
+gzip -dk acltrue.gz
+gzip -dk acltrue.gz
