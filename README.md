@@ -16,8 +16,8 @@ sudo /opt/deeplearning/install-driver.sh
 
 nvidia-smi
 git clone https://github.com/Andyluchina/Citation_Intent_Classification
+cd Citation_Intent_Classification
 pip install -r requirements.txt
-
-
 tar -xvf acl-arc.tar.gz 
 tar -xvf scicite.tar.gz 
+python3 train.py

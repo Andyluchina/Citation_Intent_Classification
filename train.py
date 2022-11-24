@@ -39,20 +39,22 @@ train_data, test_data, dev_data = load_data(ACL_TRAIN_PATH), load_data(ACL_TEST_
 
 # train_data, test_data, dev_data = train_data[:40], test_data, dev_data
 bz = 15
+bertmodel_name = 'bert-base-uncased'
+bert_dim_size = 768
 
-train = bert_process(train_data, batch_size=bz, pretrained_model_name='bert-large-uncased')
+train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
 train_loader = train.data_loader
 
-dev = bert_process(dev_data, batch_size=bz, pretrained_model_name='bert-large-uncased')
+dev = bert_process(dev_data, batch_size=bz, pretrained_model_name=bertmodel_name)
 dev_loader = dev.data_loader
 
-test = bert_process(test_data, batch_size=bz, pretrained_model_name='bert-large-uncased')
+test = bert_process(test_data, batch_size=bz, pretrained_model_name=bertmodel_name)
 test_loader = test.data_loader
 
 num_of_output = 6
 
 
-network = CustomBertClassifier(hidden_dim= 200, bert_dim_size=1024, num_of_output=6)
+network = CustomBertClassifier(hidden_dim= 200, bert_dim_size=bert_dim_size, num_of_output=6)
 loss_fn = nn.NLLLoss()
 optimizer = torch.optim.Adam(network.parameters())
 n_epochs = 60
