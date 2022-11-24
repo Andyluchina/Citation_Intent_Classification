@@ -38,6 +38,8 @@ class CustomBertClassifier(nn.Module):
         first_tokens = bert_output[:, 0]
         # print(citation_idxs)
         citation_tokens = bert_output[torch.arange(bert_output.shape[0]), citation_idxs]
+        print(citation_tokens[0])
+        print(bert_output[0, citation_idxs[0]])
         # print(first_tokens.shape)
         # print(citation_tokens.shape)
         # first_tokens batch X bert_dim_size
