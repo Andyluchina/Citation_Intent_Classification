@@ -44,10 +44,10 @@ for x in f:
     #   print(y['section_number']) #maybe.....
     #   print(y['cite_marker_offset']) #where the interested citation is
     #   print(y['cleaned_cite_text'])
-    if y['section_name'] == None:
-        print(y['text'])
-        print(y['extended_context'])
-        break
+    # if y['section_name'] == None:
+    #     print(y['text'])
+    #     print(y['extended_context'])
+    #     break
   # print(y['text'][134:148])
 #   break
 # print(len(data))
