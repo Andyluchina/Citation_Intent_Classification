@@ -18,5 +18,6 @@ nvidia-smi
 git clone https://github.com/Andyluchina/Citation_Intent_Classification
 pip install -r requirements.txt
 
-gzip -dk acltrue.gz
-gzip -dk acltrue.gz
+
+tar -xvf acl-arc.tar.gz 
+tar -xvf scicite.tar.gz 
