@@ -33,6 +33,8 @@ class CustomBertClassifier(nn.Module):
         bert_output = bert(input_ids=sentences, encoder_attention_mask=mask)
         # print(len(bert_output))
         # bert_output: batch X seq_len X bert_dim_size
+        print(bert_output[0].shape)
+        print(bert_output[1].shape)
         bert_output = bert_output[0]
         # print(bert_output.shape)
         first_tokens = bert_output[:, 0]
