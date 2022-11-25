@@ -60,8 +60,9 @@ optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-3, lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.3, verbose = True)
 n_epochs = 60
 
-for parameter in network.parameters():
-    print(parameter)
+# for parameter in network.parameters():
+#     print(parameter)
+print(network)
 def evaluate_model(network, data):
     batch_size = 0
     f1s = []
