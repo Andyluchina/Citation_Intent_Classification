@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 class bert_process:
 
-    def __init__(self, aclarc_data, scicite_data, confidence_level:float=1, cite2sentence_percent:float=0.15, max_len:int=300, 
+    def __init__(self, aclarc_data:list[dict], scicite_data:list[dict]=None, confidence_level:float=1, cite2sentence_percent:float=0.15, max_len:int=300, 
     batch_size:int=1, shuffle:bool=True, pretrained_model_name:str='bert-base-uncased', padding:str='max_length'):
         
         self.data = aclarc_data
@@ -41,9 +41,11 @@ class bert_process:
         self.mask = None
         self.token_type_ids = None
 
-        # self.index_input()
-        # self.index_output()
-        # self.make_data_loader()
+        if self.scicite_data:
+            self.clean_add_scicite_data()
+        self.index_input()
+        self.index_output()
+        self.make_data_loader()
 
 
     """
@@ -123,7 +125,7 @@ class bert_process:
 
 
 
-    def clean_data(self): # for scicite
+    def clean_add_scicite_data(self): # for scicite
         # conditions:
         # 1. has confidence level and >= 1
         # 2. label: 'result' to 'CompareOrContrast'; 'method' to 'uses' 
