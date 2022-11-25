@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 class bert_process:
 
-    def __init__(self, aclarc_data:list[dict], scicite_data:list[dict]=None, confidence_level:float=1, cite2sentence_percent:float=0.15, max_len:int=300, 
+    def __init__(self, aclarc_data:list[dict], scicite_data:tuple[list[dict],None], confidence_level:float=1, cite2sentence_percent:float=0.15, max_len:int=300, 
     batch_size:int=1, shuffle:bool=True, pretrained_model_name:str='bert-base-uncased', padding:str='max_length'):
         
         self.data = aclarc_data
