@@ -45,11 +45,13 @@ class CustomBertClassifier(nn.Module):
         lstm_output = self.lstm(bert_output)
         lstm_output = lstm_output[0]
         # print(lstm_output.shape)
-        # bert_output: batch X seq_len X 2*bert_dim_size
+        # lstm_output: batch X seq_len X 2*bert_dim_size
         # print(bert_output.shape)
         
         citation_tokens = lstm_output[torch.arange(bert_output.shape[0]), citation_idxs]
         first_tokens = lstm_output[torch.arange(bert_output.shape[0]), 0]
+        print(first_tokens[0])
+        print(lstm_output[0,0])
         # first_tokens batch X bert_dim_size
         concat_tokens = torch.concat((first_tokens, citation_tokens), dim=1)
         # concat_tokens = torch.flatten(lstm_output,start_dim=1)
