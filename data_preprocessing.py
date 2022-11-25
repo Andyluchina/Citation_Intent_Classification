@@ -105,7 +105,7 @@ class bert_process:
                 if ele == self.citation_id:
                     self.cite_pos.append(j)
                 if ele == self.sep_id:
-                    self.token_type_ids[j+1:] = 1
+                    self.token_type_ids[i,j+1:] = 1
         self.cite_pos = torch.tensor(self.cite_pos)
         
 
