@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from tqdm import tqdm
-from torchmetrics import F1Score
+from torchmetrics import F1Score, Accuracy
 from model import CustomBertClassifier
 from data_preprocessing import bert_process
 import json
@@ -79,6 +79,7 @@ def evaluate_model(network, data):
     batch_size = 0
     f1s = []
     losses = []
+    accus = []
     for batch in tqdm(data):
         x, y = batch
         network.eval()
@@ -91,14 +92,19 @@ def evaluate_model(network, data):
         f1 = F1Score(num_classes=num_of_output).to(device)
         # print(y)
         # print(predicted)
+        ACC = Accuracy().to(device)
         f1 = f1(predicted, y)
+        ac = ACC(predicted, y)
         f1s.append(f1.cpu().detach().numpy())
         losses.append(loss.cpu().detach().numpy())
+        accus.append(ac.cpu().detach().numpy())
     f1s = np.asarray(f1s)
     f1 = f1s.mean()
+    accus = np.asarray(accus)
     losses = np.asarray(losses)
+    accus = accus.mean()
     loss = losses.mean()
-    print("Loss : %f, f1 : %f" % (loss, f1))
+    print("Loss : %f, f1 : %f, accuracy: %f" % (loss, f1, accus))
     return f1
 
 best_f1 = -1
