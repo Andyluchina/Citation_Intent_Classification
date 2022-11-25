@@ -13,7 +13,7 @@ class CustomBertClassifier(nn.Module):
         """
         super(CustomBertClassifier, self).__init__()
         self.dropout = nn.Dropout(p=0.2)
-        self.linear1 = nn.Linear(4*bert_dim_size, hidden_dim)
+        self.linear1 = nn.Linear(2*lstm_hidden, hidden_dim)
         self.linear2 = nn.Linear(hidden_dim, hidden_dim)
         self.linear3 = nn.Linear(hidden_dim, num_of_output)
         # self.bert_model = model
@@ -43,7 +43,7 @@ class CustomBertClassifier(nn.Module):
         bert_output = bert_output[0]
         lstm_output = self.lstm(bert_output)
         lstm_output = lstm_output[0]
-        print(lstm_output.shape)
+        # print(lstm_output.shape)
         # bert_output: batch X seq_len X 2*bert_dim_size
         # print(bert_output.shape)
         
