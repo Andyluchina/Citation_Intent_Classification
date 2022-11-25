@@ -254,6 +254,7 @@ class Dataset:
         self.token_type_ids = token_type_ids
 
     def __getitem__(self, idx):
+        self.y[idx]
         return (self.x[idx], self.citation_pos[idx], self.mask[idx], self.token_type_ids[idx]), self.y[idx]
 
     def __len__(self):
