@@ -88,7 +88,7 @@ best_f1 = -1
 curr_f1 = -1
 for epoch in range(n_epochs):
     print('Epoch', epoch)
-    train_loss = []
+    # train_loss = []
     for batch in tqdm(train_loader):
         x, y = batch
         network.train()
@@ -106,7 +106,7 @@ for epoch in range(n_epochs):
         loss.backward()
         optimizer.step()
     
-    print("The training loss is ", train_loss.mean())
+    # print("The training loss is ", train_loss.mean())
     network.eval()
     print("train loss and f1")
     curr_f1 = evaluate_model(network, train_loader)
