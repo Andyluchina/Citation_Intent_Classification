@@ -100,7 +100,7 @@ def evaluate_model(network, data, data_object):
         
         yy=y.cpu().detach().tolist()
         for x in yy:
-            c.update(x)
+            c.update([x])
 
         # print(y)
         # print(predicted)
