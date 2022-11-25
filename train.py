@@ -37,12 +37,18 @@ ACL_DEV_PATH = './acl-arc/dev.jsonl'
 
 train_data, test_data, dev_data = load_data(ACL_TRAIN_PATH), load_data(ACL_TEST_PATH), load_data(ACL_DEV_PATH)
 
+SCICITE_TRAIN_PATH = './scicite/train.jsonl'
+SCICITE_TEST_PATH = './scicite/test.jsonl'
+SCICITE_DEV_PATH = './scicite/dev.jsonl'
+
+train_data_sci, test_data_sci, dev_data_sci = load_data(SCICITE_TRAIN_PATH), load_data(SCICITE_TEST_PATH), load_data(SCICITE_DEV_PATH)
+
 # train_data, test_data, dev_data = train_data[:40], test_data, dev_data
 bz = 64
 bertmodel_name = 'bert-base-uncased'
 bert_dim_size = 768
 
-train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
+train = bert_process(train_data, train_data_sci, batch_size=bz, pretrained_model_name=bertmodel_name)
 train_loader = train.data_loader
 
 dev = bert_process(dev_data, batch_size=bz, pretrained_model_name=bertmodel_name)
