@@ -94,7 +94,7 @@ def evaluate_model(network, data, data_object):
         output = network(sentences, citation_idxs, mask, token_id_types, device=device)
         loss = loss_fn(output, y)
         _, predicted = torch.max(output, dim=1)
-        f1 = F1Score(num_classes=num_of_output).to(device)
+        f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         # print(predicted)
         # print(y)
 
