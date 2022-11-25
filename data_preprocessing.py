@@ -168,7 +168,7 @@ class bert_process:
     def index_output(self):
 
         c = 0
-        self.indexed_output = np.array([])
+        self.indexed_output = np.array([], dtype=np.int32)
 
         for exa in self.data:
             w = exa['intent']
