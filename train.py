@@ -88,6 +88,7 @@ def evaluate_model(network, data, data_object):
         x, y = batch
         network.eval()
         y = y.to(device)
+        y = y.type(torch.LongTensor)  
         sentences, citation_idxs, mask, token_id_types = x
         sentences, citation_idxs, mask, token_id_types = sentences.to(device), citation_idxs.to(device), mask.to(device),token_id_types.to(device)
         output = network(sentences, citation_idxs, mask, token_id_types, device=device)
@@ -138,6 +139,7 @@ for epoch in range(n_epochs):
         optimizer.zero_grad()
         network.to(device)
         y = y.to(device)
+        y = y.type(torch.LongTensor)  
         sentences, citation_idxs, mask, token_id_types = x
         sentences, citation_idxs, mask, token_id_types = sentences.to(device), citation_idxs.to(device), mask.to(device),token_id_types.to(device)
         # print(sentences[0:2])
