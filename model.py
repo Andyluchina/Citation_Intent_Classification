@@ -7,7 +7,7 @@ from transformers import BertModel
 
 
 class CustomBertClassifier(nn.Module):
-    def __init__(self, hidden_dim= 50, bert_dim_size=768, num_of_output=6, lstm_hidden = 100,proj_size=100, model_name = "bert-base-uncased"):
+    def __init__(self, hidden_dim= 50, bert_dim_size=768, num_of_output=6, lstm_hidden = 80,proj_size=100, model_name = "bert-base-uncased"):
         """
         """
         super(CustomBertClassifier, self).__init__()
@@ -34,6 +34,7 @@ class CustomBertClassifier(nn.Module):
         """
         # bert.to(device)
         bert_output = self.model(input_ids=sentences, attention_mask=mask, token_type_ids=token_type_id)
+        # bert_output = self.model(input_ids=sentences, attention_mask=mask)
         # bert_output = self.model(input_ids=sentences)
         # print(len(bert_output))
         # bert_output: batch X seq_len X bert_dim_size
