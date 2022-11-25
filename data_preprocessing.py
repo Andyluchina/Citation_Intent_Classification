@@ -166,7 +166,7 @@ class bert_process:
         
 
     def index_output(self):
-        return np.array([self.output_types2idx[exa['intent']] for exa in self.data], dtype=np.int32)
+        self.indexed_output = np.array([self.output_types2idx[exa['intent']] for exa in self.data], dtype=np.int32)
 
         # c = 0
         # self.indexed_output = np.array([], dtype=np.int32)
@@ -254,7 +254,7 @@ class Dataset:
         self.token_type_ids = token_type_ids
 
     def __getitem__(self, idx):
-        self.y[idx]
+        # self.y[idx]
         return (self.x[idx], self.citation_pos[idx], self.mask[idx], self.token_type_ids[idx]), self.y[idx]
 
     def __len__(self):
