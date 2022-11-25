@@ -13,7 +13,7 @@ class CustomBertClassifier(nn.Module):
         """
         super(CustomBertClassifier, self).__init__()
         self.dropout = nn.Dropout(p=0.2)
-        self.linear1 = nn.Linear(2*bert_dim_size, hidden_dim)
+        self.linear1 = nn.Linear(4*bert_dim_size, hidden_dim)
         self.linear2 = nn.Linear(hidden_dim, hidden_dim)
         self.linear3 = nn.Linear(hidden_dim, num_of_output)
         # self.bert_model = model
@@ -23,7 +23,7 @@ class CustomBertClassifier(nn.Module):
         for name, param in self.model.named_parameters():
             if 'classifier' not in name: # classifier layer
                 param.requires_grad = False
-        self.lstm = nn.LSTM(input_size=bert_dim_size, hidden_size=lstm_hidden)
+        self.lstm = nn.LSTM(input_size=bert_dim_size, hidden_size=lstm_hidden, num_layers=3, batch_first=False, dropout=0.2, bidirectional=True)
     def forward(self, sentences, citation_idxs, mask, device="mps"):
         """
         args:
@@ -41,12 +41,15 @@ class CustomBertClassifier(nn.Module):
         # print(bert_output[1].shape)
         # first_tokens = bert_output[1]
         bert_output = bert_output[0]
+        lstm_output = self.lstm(bert_output)
+        lstm_output = lstm_output[0]
+        # bert_output: batch X seq_len X 2*bert_dim_size
         # print(bert_output.shape)
         
         # print(citation_idxs)
-        citation_tokens = bert_output[torch.arange(bert_output.shape[0]), citation_idxs]
+        citation_tokens = lstm_output[torch.arange(bert_output.shape[0]), citation_idxs]
         # print(citation_tokens[0])
-        first_tokens = bert_output[:, 0]
+        first_tokens = lstm_output[:, 0]
         # print(bert_output[0, citation_idxs[0]])
         # print(first_tokens.shape)
         # print(citation_tokens.shape)
