@@ -37,7 +37,7 @@ class bert_process:
 
         self.indexed_input = None
         self.indexed_output = None
-        self.output_types2idx = {}
+        self.output_types2idx = {'Background':0, 'Uses':1, 'CompareOrContrast':2, 'Extends':3, 'Motivation':4, 'Future':5}
         self.mask = None
         self.token_type_ids = None
 
