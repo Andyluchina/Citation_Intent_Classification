@@ -43,6 +43,7 @@ class CustomBertClassifier(nn.Module):
         bert_output = bert_output[0]
         lstm_output = self.lstm(bert_output)
         lstm_output = lstm_output[0]
+        print(lstm_output.shape)
         # bert_output: batch X seq_len X 2*bert_dim_size
         # print(bert_output.shape)
         
