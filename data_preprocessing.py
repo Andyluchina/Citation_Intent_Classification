@@ -93,8 +93,8 @@ class bert_process:
         raw_input = []
         for i, example in enumerate(self.data):
             text, section_name = re.sub("@@CITATION", "@CITATION@", example['cleaned_cite_text']), example['section_name']
-            # raw_input.append('section name : {} [SEP] sentence: {}'.format(section_name, text))
-            raw_input.append('sentence : {} [SEP] section name : {}'.format(text, section_name))
+            raw_input.append('section name : {} [SEP] sentence: {}'.format(section_name, text))
+            # raw_input.append('sentence : {} [SEP] section name : {}'.format(text, section_name))
 
         # input
         encoded_input = self.tokenizer(raw_input, padding=self.padding, max_length=self.max_len, return_tensors='pt') # dict

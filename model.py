@@ -19,9 +19,9 @@ class CustomBertClassifier(nn.Module):
         self.relu = nn.ReLU()
         self.logsoftmax = nn.LogSoftmax(dim=1)
         self.model = BertModel.from_pretrained(model_name)
-        for name, param in self.model.named_parameters():
-            if 'classifier' not in name: # classifier layer
-                param.requires_grad = False
+        # for name, param in self.model.named_parameters():
+        #     if 'classifier' not in name: # classifier layer
+        #         param.requires_grad = False
         # self.lstm = nn.LSTM(input_size=bert_dim_size, hidden_size=lstm_hidden, num_layers=1, batch_first=True, dropout=0.2)
     def forward(self, sentences, citation_idxs, mask, token_type_id=None, device="mps"):
         """
