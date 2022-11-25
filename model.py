@@ -22,7 +22,7 @@ class CustomBertClassifier(nn.Module):
         for name, param in self.model.named_parameters():
             if 'classifier' not in name: # classifier layer
                 param.requires_grad = False
-        self.lstm = nn.LSTM(input_size=bert_dim_size, hidden_size=lstm_hidden, num_layers=1, batch_first=True, dropout=0.2)
+        # self.lstm = nn.LSTM(input_size=bert_dim_size, hidden_size=lstm_hidden, num_layers=1, batch_first=True, dropout=0.2)
     def forward(self, sentences, citation_idxs, mask, token_type_id=None, device="mps"):
         """
         args:
@@ -43,14 +43,14 @@ class CustomBertClassifier(nn.Module):
         # first_tokens = bert_output[1]
         bert_output = bert_output[0]
         # print(bert_output[:, -1].shape)
-        lstm_output = self.lstm(bert_output)
-        lstm_output = lstm_output[0]
+        # lstm_output = self.lstm(bert_output)
+        # lstm_output = lstm_output[0]
         # print(lstm_output.shape)
         # lstm_output: batch X seq_len X 2*bert_dim_size
         # print(bert_output.shape)
         
-        citation_tokens = lstm_output[torch.arange(bert_output.shape[0]), citation_idxs]
-        first_tokens = lstm_output[torch.arange(bert_output.shape[0]), 0]
+        citation_tokens = bert_output[torch.arange(bert_output.shape[0]), citation_idxs]
+        first_tokens = bert_output[torch.arange(bert_output.shape[0]), 0]
         # print(first_tokens[0])
         # print(lstm_output[0,0])
         
