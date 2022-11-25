@@ -49,8 +49,8 @@ bz = 64
 bertmodel_name = 'bert-base-uncased'
 bert_dim_size = 768
 
-# train = bert_process(train_data, train_data_sci, batch_size=bz, pretrained_model_name=bertmodel_name)
-train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
+train = bert_process(train_data, train_data_sci, batch_size=bz, pretrained_model_name=bertmodel_name)
+# train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
 train_loader = train.data_loader
 
 dev = bert_process(dev_data, batch_size=bz, pretrained_model_name=bertmodel_name)
@@ -62,7 +62,7 @@ test_loader = test.data_loader
 num_of_output = 6
 
 
-network = CustomBertClassifier(hidden_dim= 80, bert_dim_size=bert_dim_size, num_of_output=6)
+network = CustomBertClassifier(hidden_dim= 100, bert_dim_size=bert_dim_size, num_of_output=6)
 loss_fn = nn.NLLLoss()
 # optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-3, lr=0.01)
 optimizer = torch.optim.Adam(network.parameters())

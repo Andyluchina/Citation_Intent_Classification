@@ -22,7 +22,7 @@ class CustomBertClassifier(nn.Module):
         for name, param in self.model.named_parameters():
             if 'classifier' not in name: # classifier layer
                 param.requires_grad = False
-        self.lstm = nn.LSTM(input_size=bert_dim_size, hidden_size=lstm_hidden, num_layers=2, batch_first=True, dropout=0.2)
+        self.lstm = nn.LSTM(input_size=bert_dim_size, hidden_size=lstm_hidden, num_layers=5, batch_first=True, dropout=0.2)
     def forward(self, sentences, citation_idxs, mask, token_type_id=None, device="mps"):
         """
         args:
