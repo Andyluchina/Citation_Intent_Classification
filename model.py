@@ -7,7 +7,7 @@ from transformers import BertModel
 
 
 class CustomBertClassifier(nn.Module):
-    def __init__(self, hidden_dim= 50, bert_dim_size=768, num_of_output=6, lstm_hidden = 80,proj_size=100, model_name = "bert-base-uncased"):
+    def __init__(self, hidden_dim= 50, bert_dim_size=768, num_of_output=6, lstm_hidden = 100,proj_size=100, model_name = "bert-base-uncased"):
         """
         """
         super(CustomBertClassifier, self).__init__()
