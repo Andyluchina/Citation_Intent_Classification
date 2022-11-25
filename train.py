@@ -85,8 +85,6 @@ def evaluate_model(network, data):
         sentences, citation_idxs, mask, token_id_types = x
         sentences, citation_idxs, mask, token_id_types = sentences.to(device), citation_idxs.to(device), mask.to(device),token_id_types.to(device)
         output = network(sentences, citation_idxs, mask, token_id_types, device=device)
-        print(y)
-        print(output)
         loss = loss_fn(output, y)
         _, predicted = torch.max(output, dim=1)
         f1 = F1Score(num_classes=num_of_output).to(device)
@@ -120,6 +118,8 @@ for epoch in range(n_epochs):
         # print(token_id_types[0:2])
         output = network(sentences, citation_idxs, mask, token_id_types, device=device)
         # print(output.shape)
+        print(y)
+        print(output)
         loss = loss_fn(output, y)
         # print(loss)
         loss.backward()
