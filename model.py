@@ -42,6 +42,7 @@ class CustomBertClassifier(nn.Module):
         # print(bert_output[1].shape)
         # first_tokens = bert_output[1]
         bert_output = bert_output[0]
+        print(bert_output[:, -1])
         lstm_output = self.lstm(bert_output)
         lstm_output = lstm_output[0]
         # print(lstm_output.shape)
@@ -50,8 +51,9 @@ class CustomBertClassifier(nn.Module):
         
         citation_tokens = lstm_output[torch.arange(bert_output.shape[0]), citation_idxs]
         first_tokens = lstm_output[torch.arange(bert_output.shape[0]), 0]
-        print(first_tokens[0])
-        print(lstm_output[0,0])
+        # print(first_tokens[0])
+        # print(lstm_output[0,0])
+        
         # first_tokens batch X bert_dim_size
         concat_tokens = torch.concat((first_tokens, citation_tokens), dim=1)
         # concat_tokens = torch.flatten(lstm_output,start_dim=1)
@@ -62,5 +64,5 @@ class CustomBertClassifier(nn.Module):
         # x3 = self.linear2(x2)
         x4 = self.linear3(x2)
         x5 = self.logsoftmax(x4)
-        print(torch.exp(x5))
+        # print(torch.exp(x5))
         return x5
