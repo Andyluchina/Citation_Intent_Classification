@@ -2,7 +2,6 @@
 
 import torch
 import json
-
 import numpy as np
 from data_preprocessing import Process
 from collections import defaultdict, Counter, OrderedDict
