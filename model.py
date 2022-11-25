@@ -62,4 +62,5 @@ class CustomBertClassifier(nn.Module):
         # x3 = self.linear2(x2)
         x4 = self.linear3(x2)
         x5 = self.logsoftmax(x4)
+        print(torch.exp(x5))
         return x5
