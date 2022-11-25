@@ -166,16 +166,17 @@ class bert_process:
         
 
     def index_output(self):
+        return np.array([self.output_types2idx[exa['intent']] for exa in self.data], dtype=np.int32)
 
-        c = 0
-        self.indexed_output = np.array([], dtype=np.int32)
+        # c = 0
+        # self.indexed_output = np.array([], dtype=np.int32)
 
-        for exa in self.data:
-            w = exa['intent']
-            if self.output_types2idx.get(w, -1) == -1:
-                self.output_types2idx[w] = c
-                c += 1
-            self.indexed_output = np.append(self.indexed_output, self.output_types2idx[w])
+        # for exa in self.data:
+        #     w = exa['intent']
+        #     if self.output_types2idx.get(w, -1) == -1:
+        #         self.output_types2idx[w] = c
+        #         c += 1
+        #     self.indexed_output = np.append(self.indexed_output, self.output_types2idx[w])
 
 
     def make_data_loader(self):
