@@ -42,7 +42,7 @@ class CustomBertClassifier(nn.Module):
         # print(bert_output[1].shape)
         # first_tokens = bert_output[1]
         bert_output = bert_output[0]
-        print(bert_output[:, -1])
+        print(bert_output[:, -1].shape)
         lstm_output = self.lstm(bert_output)
         lstm_output = lstm_output[0]
         # print(lstm_output.shape)
