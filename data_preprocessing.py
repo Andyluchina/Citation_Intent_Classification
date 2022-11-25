@@ -209,11 +209,11 @@ def load_data(path):
 # 6k has label confidence
 # 4.3k label confidence >= 0.75
 # 3.4k label confidence = 1
-whole='dasd dsa ds ly (Dymkowska et al. sfef fe '
-place='ly (Dymkowska et al.'
-a = whole[:12] + "@@CITATION" + whole[32:]
-print(whole[12:32])
-print(a)
+# whole='dasd dsa ds ly (Dymkowska et al. sfef fe '
+# place='ly (Dymkowska et al.'
+# a = whole[:12] + "@@CITATION" + whole[32:]
+# print(whole[12:32])
+# print(a)
 # tokenizer = BertTokenizer.from_pretrained('bert-large-uncased')
 # model = BertModel.from_pretrained('bert-large-uncased')
 # # text = train_data[0]['string']
