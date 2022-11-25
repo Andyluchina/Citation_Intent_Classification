@@ -91,7 +91,7 @@ def evaluate_model(network, data):
         _, predicted = torch.max(output, dim=1)
         f1 = F1Score(num_classes=num_of_output).to(device)
         print(predicted)
-        print(output)
+        print(y)
         # print(y)
         # print(predicted)
         accuracy = Accuracy().to(device)
