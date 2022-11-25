@@ -83,7 +83,7 @@ def evaluate_model(network, data, data_object):
     accus = []
 
     c=Counter()
-
+    p = Counter()
     for batch in tqdm(data):
         x, y = batch
         network.eval()
@@ -101,7 +101,9 @@ def evaluate_model(network, data, data_object):
         yy=y.cpu().detach().tolist()
         for x in yy:
             c.update([x])
-
+        pre =predicted.cpu().detach().tolist()
+        for pr in pre:
+            p.update([pr])
         # print(y)
         # print(predicted)
         accuracy = Accuracy().to(device)
@@ -112,6 +114,7 @@ def evaluate_model(network, data, data_object):
         accus.append(ac.cpu().detach().numpy())
 
     print(c)  
+    print(p)
     print(data_object.output_types2idx)  
 
     f1s = np.asarray(f1s)
