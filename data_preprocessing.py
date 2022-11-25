@@ -24,9 +24,9 @@ def load_data(path):
 
 
 
-SCICITE_TRAIN_PATH = './SCICITE/train.jsonl'
-SCICITE_TEST_PATH = './SCICITE/test.jsonl'
-SCICITE_DEV_PATH = './SCICITE/dev.jsonl'
+SCICITE_TRAIN_PATH = './scicite/train.jsonl'
+SCICITE_TEST_PATH = './scicite/test.jsonl'
+SCICITE_DEV_PATH = './scicite/dev.jsonl'
 
 train_data, test_data, dev_data = load_data(SCICITE_TRAIN_PATH), load_data(SCICITE_TEST_PATH), load_data(SCICITE_DEV_PATH)
 
@@ -38,33 +38,33 @@ train_data, test_data, dev_data = load_data(SCICITE_TRAIN_PATH), load_data(SCICI
 
 
 
-tokenizer = BertTokenizer.from_pretrained('bert-large-uncased')
-model = BertModel.from_pretrained('bert-large-uncased')
-# text = train_data[0]['string']
-# # text='CITATION'
-# text='[SEP]'
-text = "Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , [SEP] Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well ."
-# # text = ["Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well .",
-# # "Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well ."]
-# print(text)
-encoded_input = tokenizer(text, padding='max_length', max_length=100)
-for key,val in encoded_input.items():
-    print(key,val)
-# print(tokenizer.decode(encoded_input['input_ids']))
+# tokenizer = BertTokenizer.from_pretrained('bert-large-uncased')
+# model = BertModel.from_pretrained('bert-large-uncased')
+# # text = train_data[0]['string']
+# # # text='CITATION'
+# # text='[SEP]'
+# text = "Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , [SEP] Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well ."
+# # # text = ["Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well .",
+# # # "Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well ."]
+# # print(text)
+# encoded_input = tokenizer(text, padding='max_length', max_length=100)
+# for key,val in encoded_input.items():
+#     print(key,val)
+# # print(tokenizer.decode(encoded_input['input_ids']))
 
 
-# Convert token to vocabulary indices
-# indexed_tokens = tokenizer.convert_tokens_to_ids(encoded_input)
-# print(indexed_tokens)
+# # Convert token to vocabulary indices
+# # indexed_tokens = tokenizer.convert_tokens_to_ids(encoded_input)
+# # print(indexed_tokens)
 
 
 
 
 class bert_process:
 
-    def __init__(self, aclarc_data, scicite_data, max_len:int=300, batch_size:int=1, shuffle:bool=True, pretrained_model_name:str='bert-base-uncased', padding:str='max_length'):
+    def __init__(self, aclarc_data, scicite_data=None, max_len:int=300, batch_size:int=1, shuffle:bool=True, pretrained_model_name:str='bert-base-uncased', padding:str='max_length'):
         
-        self.aclarc_data = aclarc_data
+        self.data = aclarc_data
         self.scicite_data = scicite_data
 
         self.max_len = max_len
@@ -127,7 +127,7 @@ class bert_process:
 
 
     def make_data_loader(self):
-        dataset = Dataset(self.indexed_input, self.cite_pos, self.indexed_output, self.mask)
+        dataset = Dataset(self.indexed_input, self.cite_pos, self.indexed_output, self.mask, self.token_type_ids)
         self.data_loader = torch.utils.data.DataLoader(dataset, batch_size=self.batch_size, shuffle=self.shuffle)
 
 

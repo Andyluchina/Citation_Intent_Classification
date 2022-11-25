@@ -68,9 +68,9 @@ def evaluate_model(network, data):
         x, y = batch
         network.eval()
         y = y.to(device)
-        sentences, citation_idxs, mask = x
-        sentences, citation_idxs, mask = sentences.to(device), citation_idxs.to(device), mask.to(device)
-        output = network(sentences, citation_idxs, mask, device=device)
+        sentences, citation_idxs, mask, token_id_types = x
+        sentences, citation_idxs, mask, token_id_types = sentences.to(device), citation_idxs.to(device), mask.to(device),token_id_types.to(device)
+        output = network(sentences, citation_idxs, mask, token_id_types, device=device)
         loss = loss_fn(output, y)
         _, predicted = torch.max(output, dim=1)
         f1 = F1Score(num_classes=num_of_output).to(device)
@@ -96,10 +96,11 @@ for epoch in range(n_epochs):
         optimizer.zero_grad()
         network.to(device)
         y = y.to(device)
-        sentences, citation_idxs, mask = x
-        sentences, citation_idxs, mask = sentences.to(device), citation_idxs.to(device), mask.to(device)
-        # print(x)
-        output = network(sentences, citation_idxs, mask, device=device)
+        sentences, citation_idxs, mask, token_id_types = x
+        sentences, citation_idxs, mask, token_id_types = sentences.to(device), citation_idxs.to(device), mask.to(device),token_id_types.to(device)
+        # print(sentences[0:2])
+        # print(token_id_types[0:2])
+        output = network(sentences, citation_idxs, mask, token_id_types, device=device)
         # print(output.shape)
         loss = loss_fn(output, y)
         # print(loss)
