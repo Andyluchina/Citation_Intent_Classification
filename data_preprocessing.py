@@ -137,6 +137,7 @@ class bert_process:
                         (exa['citeEnd']-exa['citeStart'])/len(exa['string']) <= self.cite2sentence_percent
             if high_confi and short_cite:
                 exa['intent'] = self.label_map[exa['label']]
+                print(exa['string'][int(exa['citeStart']):int(exa['citeEnd'])])
                 exa['cleaned_cite_text'] = re.sub(exa['string'][int(exa['citeStart']):int(exa['citeEnd'])], "@@CITATION", exa['string'])
                 exa['section_name'] = self.standardized_section_name(exa['sectionName'])
                 self.data.append(exa)
