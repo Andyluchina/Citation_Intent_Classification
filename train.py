@@ -63,6 +63,8 @@ n_epochs = 60
 # for parameter in network.parameters():
 #     print(parameter)
 print(network)
+pytorch_total_params = sum(p.numel() for p in network.parameters() if p.requires_grad)
+print(pytorch_total_params)
 def evaluate_model(network, data):
     batch_size = 0
     f1s = []
