@@ -38,7 +38,7 @@ ACL_DEV_PATH = './acl-arc/dev.jsonl'
 train_data, test_data, dev_data = load_data(ACL_TRAIN_PATH), load_data(ACL_TEST_PATH), load_data(ACL_DEV_PATH)
 
 # train_data, test_data, dev_data = train_data[:40], test_data, dev_data
-bz = 20
+bz = 64
 bertmodel_name = 'bert-base-uncased'
 bert_dim_size = 768
 
@@ -54,7 +54,7 @@ test_loader = test.data_loader
 num_of_output = 6
 
 
-network = CustomBertClassifier(hidden_dim= 50, bert_dim_size=bert_dim_size, num_of_output=6)
+network = CustomBertClassifier(hidden_dim= 80, bert_dim_size=bert_dim_size, num_of_output=6)
 loss_fn = nn.NLLLoss()
 # optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-3, lr=0.01)
 optimizer = torch.optim.Adam(network.parameters())
