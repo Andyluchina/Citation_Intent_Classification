@@ -33,7 +33,7 @@ from transformers import BertTokenizer, BertModel
 
 class bert_process:
 
-    def __init__(self, data, max_len:int=300, batch_size:int=1, shuffle:bool=True, pretrained_model_name:str='bert-large-uncased', padding:str='max_length'):
+    def __init__(self, data, max_len:int=300, batch_size:int=1, shuffle:bool=True, pretrained_model_name:str='bert-base-uncased', padding:str='max_length'):
         
         self.data = data
         self.max_len = max_len
