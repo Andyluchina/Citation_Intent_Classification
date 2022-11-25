@@ -34,7 +34,7 @@ class CustomBertClassifier(nn.Module):
             log_probs: batch X num_of_output
         """
         # bert.to(device)
-        bert_output = self.model(input_ids=sentences, encoder_attention_mask=mask)
+        bert_output = self.model(input_ids=sentences, attention_mask=mask)
         # bert_output = self.model(input_ids=sentences)
         # print(len(bert_output))
         # bert_output: batch X seq_len X bert_dim_size
