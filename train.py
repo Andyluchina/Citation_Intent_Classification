@@ -60,11 +60,12 @@ optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-3, lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.3, verbose = True)
 n_epochs = 60
 
+pytorch_total_params = sum(p.numel() for p in network.parameters())
 # for parameter in network.parameters():
 #     print(parameter)
-print(network)
+print("all number of params ", pytorch_total_params)
 pytorch_total_params = sum(p.numel() for p in network.parameters() if p.requires_grad)
-print(pytorch_total_params)
+print("Trainable parameters " ,pytorch_total_params)
 def evaluate_model(network, data):
     batch_size = 0
     f1s = []
