@@ -6,6 +6,7 @@ from model import CustomBertClassifier
 from data_preprocessing import bert_process
 import json
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 # checking devices
