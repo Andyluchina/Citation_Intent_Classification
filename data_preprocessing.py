@@ -127,7 +127,7 @@ class bert_process:
 
 
     def make_data_loader(self):
-        dataset = Dataset(self.indexed_input, self.cite_pos, self.indexed_output, self.mask)
+        dataset = Dataset(self.indexed_input, self.cite_pos, self.indexed_output, self.mask, self.token_type_ids)
         self.data_loader = torch.utils.data.DataLoader(dataset, batch_size=self.batch_size, shuffle=self.shuffle)
 
 
