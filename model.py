@@ -7,13 +7,13 @@ from transformers import BertModel
 
 
 class CustomBertClassifier(nn.Module):
-    def __init__(self, hidden_dim= 50, bert_dim_size=768, num_of_output=6, lstm_hidden = 200,proj_size=100, model_name = "bert-base-uncased"):
+    def __init__(self, hidden_dim= 50, bert_dim_size=768, num_of_output=6, lstm_hidden = 100,proj_size=100, model_name = "bert-base-uncased"):
         """
 
         """
         super(CustomBertClassifier, self).__init__()
-        self.dropout = nn.Dropout(p=0.35)
-        self.linear1 = nn.Linear(2*proj_size, hidden_dim)
+        self.dropout = nn.Dropout(p=0.2)
+        self.linear1 = nn.Linear(2*lstm_hidden, hidden_dim)
         self.linear2 = nn.Linear(hidden_dim, hidden_dim)
         self.linear3 = nn.Linear(hidden_dim, num_of_output)
         # self.bert_model = model
@@ -23,8 +23,8 @@ class CustomBertClassifier(nn.Module):
         for name, param in self.model.named_parameters():
             if 'classifier' not in name: # classifier layer
                 param.requires_grad = False
-        self.lstm = nn.LSTM(input_size=bert_dim_size, hidden_size=lstm_hidden, num_layers=6, batch_first=False, dropout=0.2, proj_size=proj_size)
-    def forward(self, sentences, citation_idxs, mask, device="mps"):
+        self.lstm = nn.LSTM(input_size=bert_dim_size, hidden_size=lstm_hidden, num_layers=2, batch_first=True, dropout=0.2)
+    def forward(self, sentences, citation_idxs, mask, token_type_id=None, device="mps"):
         """
         args:
             sentences: batch X seq_len
