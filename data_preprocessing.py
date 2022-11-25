@@ -62,7 +62,7 @@ train_data, test_data, dev_data = load_data(SCICITE_TRAIN_PATH), load_data(SCICI
 
 class bert_process:
 
-    def __init__(self, aclarc_data, scicite_data, max_len:int=300, batch_size:int=1, shuffle:bool=True, pretrained_model_name:str='bert-base-uncased', padding:str='max_length'):
+    def __init__(self, aclarc_data, scicite_data=None, max_len:int=300, batch_size:int=1, shuffle:bool=True, pretrained_model_name:str='bert-base-uncased', padding:str='max_length'):
         
         self.aclarc_data = aclarc_data
         self.scicite_data = scicite_data
