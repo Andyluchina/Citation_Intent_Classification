@@ -24,7 +24,7 @@ class CustomBertClassifier(nn.Module):
             if 'classifier' not in name: # classifier layer
                 param.requires_grad = False
         self.lstm = nn.LSTM(input_size=bert_dim_size, hidden_size=lstm_hidden, num_layers=3, batch_first=True, dropout=0.2)
-    def forward(self, sentences, citation_idxs, mask, token_type_id=None, device="mps"):
+    def forward(self, sentences, citation_idxs, mask, token_type_id, device="mps"):
         """
         args:
             sentences: batch X seq_len
@@ -34,7 +34,7 @@ class CustomBertClassifier(nn.Module):
             log_probs: batch X num_of_output
         """
         # bert.to(device)
-        bert_output = self.model(input_ids=sentences, attention_mask=mask)
+        bert_output = self.model(input_ids=sentences, attention_mask=mask, token_type_ids=token_type_id)
         # bert_output = self.model(input_ids=sentences)
         # print(len(bert_output))
         # bert_output: batch X seq_len X bert_dim_size
