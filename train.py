@@ -66,7 +66,7 @@ network = CustomBertClassifier(hidden_dim= 100, bert_dim_size=bert_dim_size, num
 loss_fn = nn.NLLLoss()
 # optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-3, lr=0.01)
 optimizer = torch.optim.Adam(network.parameters())
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.3, verbose = True)
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 1, factor = 0.5, verbose = True)
 n_epochs = 60
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
