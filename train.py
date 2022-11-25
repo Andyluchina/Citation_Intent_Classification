@@ -98,8 +98,8 @@ for epoch in range(n_epochs):
         y = y.to(device)
         sentences, citation_idxs, mask, token_id_types = x
         sentences, citation_idxs, mask, token_id_types = sentences.to(device), citation_idxs.to(device), mask.to(device),token_id_types.to(device)
-        print(sentences)
-        print(token_id_types)
+        print(sentences[0:2])
+        print(token_id_types[0:2])
         output = network(sentences, citation_idxs, mask, token_id_types, device=device)
         # print(output.shape)
         loss = loss_fn(output, y)
