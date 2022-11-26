@@ -154,7 +154,7 @@ for epoch in range(n_epochs):
         # print(y)
         # print(output)
         # loss = F.cross_entropy(output, y, weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
-        loss = F.nll_loss(output, y, weight=torch.tensor([1000.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
+        loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 5000.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
         # print(loss)
         loss.backward()
         optimizer.step()
