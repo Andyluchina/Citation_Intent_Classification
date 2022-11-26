@@ -7,13 +7,13 @@ from transformers import BertModel
 
 
 class CustomBertClassifier(nn.Module):
-    def __init__(self, hidden_dim= 50, bert_dim_size=768, num_of_output=6, lstm_hidden = 150,proj_size=100, model_name = "bert-base-uncased"):
+    def __init__(self, hidden_dim= 50, bert_dim_size=768, num_of_output=6, lstm_hidden = 170,proj_size=100, model_name = "bert-base-uncased"):
         """
         """
         super(CustomBertClassifier, self).__init__()
         self.dropout = nn.Dropout(p=0.2)
         self.linear1 = nn.Linear(2*lstm_hidden, hidden_dim)
-        # self.linear2 = nn.Linear(hidden_dim, hidden_dim)
+        self.linear2 = nn.Linear(hidden_dim, hidden_dim)
         self.linear3 = nn.Linear(hidden_dim, num_of_output)
         self.linear_bert = nn.Linear(bert_dim_size, lstm_hidden)
         # self.bert_model = model
@@ -23,7 +23,7 @@ class CustomBertClassifier(nn.Module):
         for name, param in self.model.named_parameters():
             if 'classifier' not in name: # classifier layer
                 param.requires_grad = False
-        self.lstm = nn.LSTM(input_size=lstm_hidden, hidden_size=lstm_hidden, num_layers=3, batch_first=True, dropout=0.2)
+        self.lstm = nn.LSTM(input_size=lstm_hidden, hidden_size=lstm_hidden, num_layers=4, batch_first=True, dropout=0.25)
     def forward(self, sentences, citation_idxs, mask, token_type_id=None, device="mps"):
         """
         args:
@@ -62,8 +62,8 @@ class CustomBertClassifier(nn.Module):
         # concat_tokens batch X 2*bert_dim_size
         x1 = concat_tokens
         x2 = self.dropout(self.relu(self.linear1(x1)))
-        x3 = self.relu(self.linear3(x2))
-        # x4 = self.linear3(x3)
-        x5 = self.logsoftmax(x3)
+        x3 = self.relu(self.linear2(x2))
+        x4 = self.linear3(x3)
+        x5 = self.logsoftmax(x4)
         # print(torch.exp(x5))
         return x5
