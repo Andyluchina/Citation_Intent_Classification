@@ -22,7 +22,8 @@ class bert_process:
 
         self.confidence_level = confidence_level
         self.cite2sentence_percent = cite2sentence_percent
-        self.label_map = {'background':'Background','method':'Uses','result':'CompareOrContrast'}
+        # self.label_map = {'background':'Background','method':'Uses','result':'CompareOrContrast'}
+        self.label_map = {'background':'Background','result':'CompareOrContrast'}
         self.section_name_vocab = ['introduction','experiment','conclusion','related work','method','discussion','result','background']
 
         self.max_len = max_len
@@ -135,9 +136,9 @@ class bert_process:
             high_confi = exa.get('label_confidence', 0) >= self.confidence_level
             short_cite = isinstance(exa['citeEnd'],(float,int)) and isinstance(exa['citeStart'],(float,int)) and \
                         (exa['citeEnd']-exa['citeStart'])/len(exa['string']) <= self.cite2sentence_percent
-            if high_confi and short_cite:
+            has_corresponding_label = self.label_map.get(exa['label'], False)
+            if high_confi and short_cite and has_corresponding_label:
                 exa['intent'] = self.label_map[exa['label']]
-                # print(exa['string'][int(exa['citeStart']):int(exa['citeEnd']+3)])
                 start, end = int(exa['citeStart']), int(exa['citeEnd'])
                 exa['cleaned_cite_text'] = exa['string'][:start] + "@@CITATION" + exa['string'][end:]
                 exa['section_name'] = self.standardized_section_name(exa['sectionName'])
