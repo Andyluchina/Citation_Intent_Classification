@@ -68,7 +68,7 @@ network = CustomBertClassifier(hidden_dim= 80, bert_dim_size=bert_dim_size, num_
 # loss_fn = nn.CrossEntropyLoss(weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
 # loss_fn = nn.CrossEntropyLoss(weight=torch.tensor([0.006, 0.031, 0.043,0.32, 0.26,0.335]).to(device))
 
-loss_fn = nn.NLLLoss()
+loss_fn = nn.NLLLoss(weight=torch.tensor([1, 2.735015773,2.842622951,11.40789474,13.76190476,14.45]).to(device))
 # optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-3, lr=0.01)
 optimizer = torch.optim.Adam(network.parameters(), lr =0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 1, factor = 0.5, verbose = True)
