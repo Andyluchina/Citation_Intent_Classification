@@ -18,7 +18,7 @@ class CustomBertClassifier(nn.Module):
         self.linear_bert = nn.Linear(bert_dim_size, lstm_hidden)
         # self.bert_model = model
         self.relu = nn.ReLU()
-        self.logsoftmax = nn.LogSoftmax(dim=1)
+        self.logsoftmax = nn.Softmax(dim=1)
         self.model = BertModel.from_pretrained(model_name)
         for name, param in self.model.named_parameters():
             if 'classifier' not in name: # classifier layer
