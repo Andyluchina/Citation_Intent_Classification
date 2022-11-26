@@ -8,6 +8,7 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import defaultdict, Counter, OrderedDict
+import torch.nn.functional as F
 
 
 # checking devices
@@ -64,7 +65,7 @@ num_of_output = 6
 
 
 network = CustomBertClassifier(hidden_dim= 80, bert_dim_size=bert_dim_size, num_of_output=6)
-loss_fn = nn.CrossEntropyLoss(weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
+# loss_fn = nn.CrossEntropyLoss(weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
 # loss_fn = nn.CrossEntropyLoss(weight=torch.tensor([0.006, 0.031, 0.043,0.32, 0.26,0.335]).to(device))
 
 # loss_fn = nn.NLLLoss()
@@ -95,7 +96,7 @@ def evaluate_model(network, data, data_object):
         sentences, citation_idxs, mask, token_id_types = x
         sentences, citation_idxs, mask, token_id_types = sentences.to(device), citation_idxs.to(device), mask.to(device),token_id_types.to(device)
         output = network(sentences, citation_idxs, mask, token_id_types, device=device)
-        loss = loss_fn(output, y)
+        loss = F.cross_entropy(output, y, weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
         _, predicted = torch.max(output, dim=1)
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         # print(predicted)
@@ -151,7 +152,7 @@ for epoch in range(n_epochs):
         # print(output.shape)
         # print(y)
         # print(output)
-        loss = loss_fn(output, y)
+        loss = F.cross_entropy(output, y, weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
         # print(loss)
         loss.backward()
         optimizer.step()
