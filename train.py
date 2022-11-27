@@ -91,8 +91,8 @@ def evaluate_model(network, data, data_object):
     losses = []
     accus = []
 
-    c = p = {str(i): 0 for i in range(6)}
-    # p = {'0':0,'1':0,'2':0,'3':0,'4':0,'5':0}
+    c = {str(i): 0 for i in range(6)}
+    p = {str(i): 0 for i in range(6)}
 
     for batch in tqdm(data):
         x, y = batch
@@ -106,7 +106,8 @@ def evaluate_model(network, data, data_object):
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         
         _, predicted = torch.max(output, dim=1)
-        loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predicted))
+        # loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predicted))
+        loss = loss_fn(output, y) + class_factor * torch.sum(torch.tensor([torch.absolute(y[i]-predicted[i]) for i in range(len(y))]))
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         
         for x in y.cpu().detach().tolist():
