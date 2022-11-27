@@ -168,7 +168,7 @@ for epoch in range(n_epochs):
         if epoch < 15:    
             loss = loss_fn(output, y) + torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
         else:
-            loss = loss_fn(output, y) + torch.divide(1,epoch-13) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
+            loss = loss_fn(output, y) + torch.divide(1,(epoch-13)/2) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         # print(loss)
         # print(loss)
