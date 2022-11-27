@@ -91,8 +91,9 @@ def evaluate_model(network, data, data_object):
     losses = []
     accus = []
 
-    c=Counter()
-    p = Counter()
+    c = {'0':0,'1':0,'2':0,'3':0,'4':0,'5':0}
+    p = {'0':0,'1':0,'2':0,'3':0,'4':0,'5':0}
+
     for batch in tqdm(data):
         x, y = batch
         network.eval()
@@ -107,18 +108,13 @@ def evaluate_model(network, data, data_object):
         _, predicted = torch.max(output, dim=1)
         loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predicted))
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
-        # print(predicted)
-        # print(y)
-
         
-        yy=y.cpu().detach().tolist()
-        for x in yy:
-            c.update([x])
-        pre =predicted.cpu().detach().tolist()
-        for pr in pre:
-            p.update([pr])
-        # print(y)
-        # print(predicted)
+        for x in y.cpu().detach().tolist():
+            c[x] += 1
+
+        for pr in predicted.cpu().detach().tolist():
+            p[pr] += 1
+
         accuracy = Accuracy().to(device)
         f1 = f1(predicted, y)
         ac = accuracy(predicted, y)
@@ -126,9 +122,9 @@ def evaluate_model(network, data, data_object):
         losses.append(loss.cpu().detach().numpy())
         accus.append(ac.cpu().detach().numpy())
 
-    print('y: ', c)  
-    print('pred: ',p)
-    print('data_object.output_types2idx: ',data_object.output_types2idx)  
+    print('y_true: ', c)  
+    print('y_pred: ',p)
+    print('output_types2idx: ',data_object.output_types2idx)  
 
     f1s = np.asarray(f1s)
     f1 = f1s.mean()
