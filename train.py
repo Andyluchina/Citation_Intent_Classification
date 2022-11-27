@@ -68,10 +68,10 @@ network = CustomBertClassifier(hidden_dim= 100, bert_dim_size=bert_dim_size, num
 # loss_fn = nn.CrossEntropyLoss(weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
 # loss_fn = nn.CrossEntropyLoss(weight=torch.tensor([0.006, 0.031, 0.043,0.32, 0.26,0.335]).to(device))
 
-# loss_fn = nn.NLLLoss(weight=torch.tensor([1.0,2.735015773,2.842622951,13.76190476,11.40789474,14.45]).to(device))
+loss_fn = nn.NLLLoss(weight=torch.tensor([1.0,2.735015773,2.842622951,13.76190476,11.40789474,14.45]).to(device))
 # 1	10.1829653	7.017391304	51.23809524	42.47368421	53.8
 # loss_fn = nn.NLLLoss(weight=torch.tensor([1.0,10.1829653,7.017391304,51.23809524,42.47368421,53.8]).to(device))
-loss_fn = nn.NLLLoss()
+# loss_fn = nn.NLLLoss()
 
 optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.01)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
