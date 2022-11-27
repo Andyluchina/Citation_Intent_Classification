@@ -91,8 +91,8 @@ def evaluate_model(network, data, data_object):
     losses = []
     accus = []
 
-    c = {'0':0,'1':0,'2':0,'3':0,'4':0,'5':0}
-    p = {'0':0,'1':0,'2':0,'3':0,'4':0,'5':0}
+    c = p = {str(i): 0 for i in range(6)}
+    # p = {'0':0,'1':0,'2':0,'3':0,'4':0,'5':0}
 
     for batch in tqdm(data):
         x, y = batch
@@ -124,7 +124,7 @@ def evaluate_model(network, data, data_object):
 
     print('y_true: ', c)  
     print('y_pred: ',p)
-    print('output_types2idx: ',data_object.output_types2idx)  
+    print('y_types: ',data_object.output_types2idx)  
 
     f1s = np.asarray(f1s)
     f1 = f1s.mean()
