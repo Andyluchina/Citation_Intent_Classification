@@ -73,7 +73,7 @@ network = CustomBertClassifier(hidden_dim= 100, bert_dim_size=bert_dim_size, num
 # loss_fn = nn.NLLLoss(weight=torch.tensor([1.0,10.1829653,7.017391304,51.23809524,42.47368421,53.8]).to(device))
 loss_fn = nn.NLLLoss()
 
-optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-4, lr=0.001)
+optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-3, lr=0.01)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
 n_epochs = 200
@@ -168,7 +168,8 @@ for epoch in range(n_epochs):
         if epoch < 15:    
             loss = loss_fn(output, y) + torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
         else:
-            loss = loss_fn(output, y) + torch.divide(1,(epoch-13)/2) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
+            print("kicking in decay for regularizer term: ", max(0.1,1.0/((epoch-13)/2)))
+            loss = loss_fn(output, y) + max(0.1,1/((epoch-13)/2)) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         # print(loss)
         # print(loss)
