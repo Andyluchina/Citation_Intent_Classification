@@ -48,8 +48,13 @@ train_data_sci, test_data_sci, dev_data_sci = load_data(SCICITE_TRAIN_PATH), loa
 
 # train_data, test_data, dev_data = train_data[:40], test_data, dev_data
 bz = 64
-bertmodel_name = 'bert-base-uncased'
-bert_dim_size = 768
+bertmodel_name = 'bert-large-uncased'
+# bertmodel_name = 'bert-base-uncased'
+
+if bertmodel_name == 'bert-base-uncased':
+    bert_dim_size = 768
+else:
+    bert_dim_size = 1024
 
 # train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
 train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name)
