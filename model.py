@@ -46,7 +46,7 @@ class CustomBertClassifier(nn.Module):
         # first_tokens = bert_output[1]
         bert_output = bert_output[0]
         # print(bert_output[:, -1].shape)
-        mask = mask.type(torch.Tensor)
+        mask = mask.type(torch.Tensor).to(device)
         lstm_output = self.transformer_encoder(self.linear_bert(self.dropout(bert_output)), src_key_padding_mask=mask)
         lstm_output = lstm_output[0]
         # print(lstm_output.shape)
