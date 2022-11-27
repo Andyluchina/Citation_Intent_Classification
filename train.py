@@ -160,6 +160,7 @@ for epoch in range(n_epochs):
         # print(output)
         # loss = F.cross_entropy(output, y, weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
         predictted_output = torch.max(output, dim=1)
+        print(predictted_output)
         loss = loss_fn(output, y) + class_factor * (torch.sum(y) - torch.sum(predictted_output))
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         # print(loss)
