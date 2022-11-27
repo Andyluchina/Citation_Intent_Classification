@@ -76,7 +76,7 @@ optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-2, lr=0.01)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
 n_epochs = 200
-class_factor = 0.2
+class_factor = 0.5
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
 # for parameter in network.parameters():
@@ -161,6 +161,9 @@ for epoch in range(n_epochs):
         # loss = F.cross_entropy(output, y, weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
         _, predictted_output = torch.max(output, dim=1)
         # print(predictted_output)
+        print(torch.sum(y))
+        print(torch.sum(predictted_output))
+        print(class_factor * (torch.sum(y) - torch.sum(predictted_output)))
         loss = loss_fn(output, y) + class_factor * (torch.sum(y) - torch.sum(predictted_output))
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         # print(loss)
