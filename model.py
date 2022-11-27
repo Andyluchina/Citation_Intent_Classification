@@ -11,7 +11,7 @@ class CustomBertClassifier(nn.Module):
         """
         """
         super(CustomBertClassifier, self).__init__()
-        self.dropout = nn.Dropout(p=0.2)
+        self.dropout = nn.Dropout(p=0.3)
         self.linear1 = nn.Linear(2*lstm_hidden, hidden_dim)
         self.linear2 = nn.Linear(hidden_dim, hidden_dim)
         self.linear3 = nn.Linear(hidden_dim, num_of_output)
@@ -24,8 +24,8 @@ class CustomBertClassifier(nn.Module):
             if 'classifier' not in name: # classifier layer
                 param.requires_grad = False
         # self.lstm = nn.LSTM(input_size=lstm_hidden, hidden_size=lstm_hidden, num_layers=4, batch_first=True, dropout=0.25)
-        encoder_layer = nn.TransformerEncoderLayer(d_model=lstm_hidden, nhead=4, dim_feedforward=250, dropout=0.2, batch_first=True)
-        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=3)
+        encoder_layer = nn.TransformerEncoderLayer(d_model=lstm_hidden, nhead=4, dim_feedforward=250, dropout=0.3, batch_first=True)
+        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=2)
     def forward(self, sentences, citation_idxs, mask, token_type_id=None, device="mps"):
         """
         args:
@@ -65,8 +65,8 @@ class CustomBertClassifier(nn.Module):
         # concat_tokens batch X 2*bert_dim_size
         x1 = concat_tokens
         x2 = self.dropout(self.relu(self.linear1(x1)))
-        x3 = self.relu(self.linear2(x2))
-        x4 = self.linear3(x3)
-        x5 = self.logsoftmax(x4)
+        x3 = self.relu(self.linear3(x2))
+        # x4 = self.linear3(x3)
+        x5 = self.logsoftmax(x3)
         # print(torch.exp(x5))
         return x5
