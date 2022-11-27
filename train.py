@@ -77,7 +77,7 @@ optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-4, lr=0.001
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
 n_epochs = 60
-class_factor = 0.1
+class_factor = 0.3
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
 # for parameter in network.parameters():
