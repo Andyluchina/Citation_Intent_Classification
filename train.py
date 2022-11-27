@@ -109,7 +109,7 @@ def evaluate_model(network, data, data_object):
         loss = loss_fn(output, y) + class_factor * torch.sum(torch.absolute(torch.subtract(y, predicted)))
 
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
-        
+        # self.output_types2idx = {'Background':3, 'Uses':1, 'CompareOrContrast':2, 'Extends':4, 'Motivation':0, 'Future':5}
         for x in y.cpu().detach().tolist():
             c[str(x)] += 1
 
