@@ -107,7 +107,7 @@ def evaluate_model(network, data, data_object):
         
         _, predicted = torch.max(output, dim=1)
         # loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predicted))
-        loss = loss_fn(output, y) + class_factor * torch.sum(torch.absolute(torch.subtract(y, predicted)))
+        loss = loss_fn(output, y) + torch.divide(1,epoch) * torch.sum(torch.absolute(torch.subtract(y, predicted)))
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         
         for x in y.cpu().detach().tolist():
@@ -164,7 +164,11 @@ for epoch in range(n_epochs):
         # print(torch.sum(predictted_output))
         # print(class_factor * (torch.sum(y) - torch.sum(predictted_output)))
         # print(loss_fn(output, y))
-        loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
+        # loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
+        if epoch < 15:    
+            loss = loss_fn(output, y) + torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
+        else:
+            loss = loss_fn(output, y) + torch.divide(1,epoch-13) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         # print(loss)
         # print(loss)
