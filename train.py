@@ -110,10 +110,10 @@ def evaluate_model(network, data, data_object):
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         
         for x in y.cpu().detach().tolist():
-            c[x] += 1
+            c[str(x)] += 1
 
         for pr in predicted.cpu().detach().tolist():
-            p[pr] += 1
+            p[str(pr)] += 1
 
         accuracy = Accuracy().to(device)
         f1 = f1(predicted, y)
