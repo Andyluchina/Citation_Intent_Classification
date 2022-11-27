@@ -166,7 +166,7 @@ for epoch in range(n_epochs):
         # print(torch.sum(predictted_output))
         # print(class_factor * (torch.sum(y) - torch.sum(predictted_output)))
         # print(loss_fn(output, y))
-        loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
+        loss = loss_fn(output, y) + class_factor * (torch.sum(y) - torch.sum(predictted_output))
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         # print(loss)
         # print(loss)
