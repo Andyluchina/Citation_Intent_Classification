@@ -107,7 +107,7 @@ def evaluate_model(network, data, data_object):
         
         _, predicted = torch.max(output, dim=1)
         # loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predicted))
-        loss = loss_fn(output, y) + class_factor * torch.sum(torch.tensor([torch.absolute(y[i]-predicted[i]) for i in range(len(y))]))
+        loss = loss_fn(output, y) + class_factor * torch.sum(torch.tensor([torch.absolute(torch.subtract(y[i], predicted[i])) for i in range(len(y))]))
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         
         for x in y.cpu().detach().tolist():
