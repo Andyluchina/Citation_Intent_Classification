@@ -25,7 +25,7 @@ class CustomBertClassifier(nn.Module):
                 param.requires_grad = False
         # self.lstm = nn.LSTM(input_size=lstm_hidden, hidden_size=lstm_hidden, num_layers=4, batch_first=True, dropout=0.25)
         encoder_layer = nn.TransformerEncoderLayer(d_model=lstm_hidden, nhead=8, dim_feedforward=512, dropout=0.2, batch_first=True)
-        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=6)
+        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=4)
     def forward(self, sentences, citation_idxs, mask, token_type_id=None, device="mps"):
         """
         args:
@@ -48,7 +48,7 @@ class CustomBertClassifier(nn.Module):
         # print(bert_output[:, -1].shape)
         mask = mask.type(torch.Tensor).to(device)
         lstm_output = self.transformer_encoder(self.linear_bert(self.dropout(bert_output)), src_key_padding_mask=mask)
-        lstm_output = lstm_output[0]
+        # lstm_output = lstm_output[0]
         # print(lstm_output.shape)
         # lstm_output: batch X seq_len X 2*bert_dim_size
         # print(bert_output.shape)
