@@ -23,5 +23,7 @@ tar -xvf scicite.tar.gz
 python3 train.py
 git status
 
+readlink -f bestmodel.npy
+
 y:  Counter({0: 867, 1: 317, 2: 305, 4: 76, 3: 63, 5: 60})
 pred:  Counter({0: 1192, 1: 496})
