@@ -7,7 +7,7 @@ from transformers import BertModel
 
 
 class CustomBertClassifier(nn.Module):
-    def __init__(self, hidden_dim= 50, bert_dim_size=768, num_of_output=6, lstm_hidden = 100,proj_size=100, model_name = "bert-base-uncased"):
+    def __init__(self, hidden_dim= 100, bert_dim_size=768, num_of_output=6, lstm_hidden = 100,proj_size=100, model_name = "bert-base-uncased"):
         """
         """
         super(CustomBertClassifier, self).__init__()
@@ -65,8 +65,8 @@ class CustomBertClassifier(nn.Module):
         # concat_tokens batch X 2*bert_dim_size
         x1 = concat_tokens
         x2 = self.dropout(self.relu(self.linear1(x1)))
-        x3 = self.relu(self.linear2(x2))
-        x4 = self.linear3(x3)
-        x5 = self.logsoftmax(x4)
+        x3 = self.relu(self.linear3(x2))
+        # x4 = self.linear3(x3)
+        x5 = self.logsoftmax(x3)
         # print(torch.exp(x5))
         return x5
