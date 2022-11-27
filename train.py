@@ -48,7 +48,7 @@ train_data_sci, test_data_sci, dev_data_sci = load_data(SCICITE_TRAIN_PATH), loa
 
 # train_data, test_data, dev_data = train_data[:40], test_data, dev_data
 bz = 64
-bertmodel_name = 'bert-large-uncased'
+bertmodel_name = 'bert-base-uncased'
 # bertmodel_name = 'bert-base-uncased'
 
 if bertmodel_name == 'bert-base-uncased':
