@@ -56,8 +56,8 @@ if bertmodel_name == 'bert-base-uncased':
 else:
     bert_dim_size = 1024
 
-train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
-# train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name)
+# train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
+train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name)
 train_loader = train.data_loader
 
 dev = bert_process(dev_data, batch_size=bz, pretrained_model_name=bertmodel_name)
@@ -78,11 +78,11 @@ network = CustomBertClassifier(hidden_dim= 150, bert_dim_size=bert_dim_size, num
 # loss_fn = nn.NLLLoss(weight=torch.tensor([1.0,10.1829653,7.017391304,51.23809524,42.47368421,53.8]).to(device))
 loss_fn = nn.NLLLoss()
 
-optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-6, lr=0.001)
+optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-4, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.3, verbose = True)
 n_epochs = 60
-class_factor = 0.2
+class_factor = 0.1
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
 # for parameter in network.parameters():
