@@ -56,8 +56,8 @@ if bertmodel_name == 'bert-base-uncased':
 else:
     bert_dim_size = 1024
 
-# train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
-train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name)
+train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
+# train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name)
 train_loader = train.data_loader
 
 dev = bert_process(dev_data, batch_size=bz, pretrained_model_name=bertmodel_name)
@@ -69,7 +69,7 @@ test_loader = test.data_loader
 num_of_output = 6
 
 
-network = CustomBertClassifier(hidden_dim= 150, bert_dim_size=bert_dim_size, num_of_output=6, model_name=bertmodel_name)
+network = CustomBertClassifier(hidden_dim= 100, bert_dim_size=bert_dim_size, num_of_output=6, model_name=bertmodel_name)
 # loss_fn = nn.CrossEntropyLoss(weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
 # loss_fn = nn.CrossEntropyLoss(weight=torch.tensor([0.006, 0.031, 0.043,0.32, 0.26,0.335]).to(device))
 
