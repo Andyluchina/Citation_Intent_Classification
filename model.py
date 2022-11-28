@@ -25,7 +25,7 @@ class CustomBertClassifier(nn.Module):
                 param.requires_grad = False
         # self.lstm = nn.LSTM(input_size=lstm_hidden, hidden_size=lstm_hidden, num_layers=4, batch_first=True, dropout=0.25)
         encoder_layer = nn.TransformerEncoderLayer(d_model=lstm_hidden, nhead=3, dim_feedforward=100, dropout=0.1, batch_first=True)
-        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=2)
+        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=1)
     def forward(self, sentences, citation_idxs, mask, token_type_id=None, device="mps"):
         """
         args:
