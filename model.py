@@ -11,7 +11,7 @@ class CustomBertClassifier(nn.Module):
         """
         """
         super(CustomBertClassifier, self).__init__()
-        self.dropout = nn.Dropout(p=0.1)
+        self.dropout = nn.Dropout(p=0.2)
         self.linear1 = nn.Linear(2*lstm_hidden, hidden_dim)
         self.linear2 = nn.Linear(hidden_dim, hidden_dim)
         self.linear3 = nn.Linear(hidden_dim, num_of_output)
@@ -24,7 +24,7 @@ class CustomBertClassifier(nn.Module):
             if 'classifier' not in name: # classifier layer
                 param.requires_grad = False
         # self.lstm = nn.LSTM(input_size=lstm_hidden, hidden_size=lstm_hidden, num_layers=4, batch_first=True, dropout=0.25)
-        encoder_layer = nn.TransformerEncoderLayer(d_model=lstm_hidden, nhead=4, dim_feedforward=100, dropout=0.1, batch_first=True)
+        encoder_layer = nn.TransformerEncoderLayer(d_model=lstm_hidden, nhead=4, dim_feedforward=100, dropout=0.2, batch_first=True)
         self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=1)
     def forward(self, sentences, citation_idxs, mask, token_type_id=None, device="mps"):
         """
