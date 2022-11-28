@@ -184,8 +184,8 @@ for epoch in range(n_epochs):
     
     # print("The training loss is ", train_loss.mean())
     network.eval()
-    print("train loss and f1")
-    curr_f1 = evaluate_model(network, train_loader, train)
+    # print("train loss and f1")
+    # curr_f1 = evaluate_model(network, train_loader, train)
     print("dev loss and f1")
     curr_f1 = evaluate_model(network, dev_loader, dev)
     scheduler.step(curr_f1)
