@@ -56,8 +56,8 @@ if bertmodel_name == 'bert-base-uncased':
 else:
     bert_dim_size = 1024
 
-# train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
-train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name)
+train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
+# train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name)
 train_loader = train.data_loader
 
 dev = bert_process(dev_data, batch_size=bz, pretrained_model_name=bertmodel_name)
