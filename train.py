@@ -82,7 +82,7 @@ optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.000
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
 n_epochs = 60
-class_factor = 0.6
+class_factor = 0.7
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
 # for parameter in network.parameters():
@@ -171,10 +171,10 @@ for epoch in range(n_epochs):
         # print(loss_fn(output, y))
         # loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
         if epoch < 15:    
-            loss = loss_fn(output, y) + torch.pow(2, class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))) - 1
+            loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output))))
         else:
             # loss = loss_fn(output, y) + class_factor * max(0.1,1/((epoch-13)/2)) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
-            loss = loss_fn(output, y) + torch.pow(2, class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))) - 1
+            loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))) 
 
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         # print(loss)
