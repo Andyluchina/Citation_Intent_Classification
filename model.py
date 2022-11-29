@@ -38,6 +38,7 @@ class CustomBertClassifier(nn.Module):
         # bert.to(device)
         bert_output = self.model(input_ids=sentences, attention_mask=mask, token_type_ids=token_type_id)
         # extract directly cls token
+        bert_output = bert_output[0]
         cls_tokens = bert_output[torch.arange(bert_output.shape[0]), 0]
         # bert_output = self.model(input_ids=sentences, attention_mask=mask)
         # bert_output = self.model(input_ids=sentences)
@@ -46,7 +47,7 @@ class CustomBertClassifier(nn.Module):
         # print(bert_output[0].shape)
         # print(bert_output[1].shape)
         # first_tokens = bert_output[1]
-        bert_output = bert_output[0]
+        
         # print(bert_output[:, -1].shape)
         # mask = mask.type(torch.Tensor).to(device)
         lstm_output = self.transformer_encoder(self.linear_bert(self.dropout(bert_output)))
