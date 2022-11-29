@@ -37,6 +37,7 @@ class CustomBertClassifier(nn.Module):
         """
         # bert.to(device)
         bert_output = self.model(input_ids=sentences, attention_mask=mask, token_type_ids=token_type_id)
+        # extract directly cls token
         cls_tokens = bert_output[torch.arange(bert_output.shape[0]), 0]
         # bert_output = self.model(input_ids=sentences, attention_mask=mask)
         # bert_output = self.model(input_ids=sentences)
