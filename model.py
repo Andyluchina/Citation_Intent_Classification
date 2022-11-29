@@ -12,7 +12,7 @@ class CustomBertClassifier(nn.Module):
         """
         super(CustomBertClassifier, self).__init__()
         self.dropout = nn.Dropout(p=0.2)
-        self.linear1 = nn.Linear(3*lstm_hidden, hidden_dim)
+        self.linear1 = nn.Linear(2*lstm_hidden + bert_dim_size, hidden_dim)
         self.linear2 = nn.Linear(hidden_dim, hidden_dim)
         self.linear3 = nn.Linear(hidden_dim, num_of_output)
         self.linear_bert = nn.Linear(bert_dim_size, lstm_hidden)
