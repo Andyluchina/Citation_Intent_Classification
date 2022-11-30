@@ -171,7 +171,7 @@ for epoch in range(n_epochs):
         # print(loss_fn(output, y))
         # loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
         # if epoch < 15:    
-        loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + 0.4 * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
+        loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + 0.7 * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
 
         # loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output))))
         # else:
