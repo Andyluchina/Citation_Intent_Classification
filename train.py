@@ -111,7 +111,7 @@ def evaluate_model(network, data, data_object):
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         
         _, predicted = torch.max(output, dim=1)
-        loss = loss_fn(output, y) + torch.exp(class_factor * class_factor * ((torch.subtract(y, predicted) != 0).sum()))
+        loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predicted) != 0).sum()) + 0.8 * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
 
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         # self.output_types2idx = {'Background':3, 'Uses':1, 'CompareOrContrast':2, 'Extends':4, 'Motivation':0, 'Future':5}
