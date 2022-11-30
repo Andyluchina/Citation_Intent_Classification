@@ -47,7 +47,7 @@ SCICITE_DEV_PATH = './scicite/dev.jsonl'
 train_data_sci, test_data_sci, dev_data_sci = load_data(SCICITE_TRAIN_PATH), load_data(SCICITE_TEST_PATH), load_data(SCICITE_DEV_PATH)
 
 # train_data, test_data, dev_data = train_data[:40], test_data, dev_data
-bz = 20
+bz = 40
 bertmodel_name = 'bert-large-uncased'
 # bertmodel_name = 'bert-base-uncased'
 
@@ -82,8 +82,8 @@ optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-6, lr=0.000
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
 n_epochs = 60
-class_factor = 2
-sum_factor = 0.5
+class_factor = 1
+sum_factor = 0.4
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
 # for parameter in network.parameters():
