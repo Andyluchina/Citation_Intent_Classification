@@ -8,12 +8,13 @@ We choose to conduct original research exploring how to improve existing models 
 
 
 ACL ARC dataset size
-train: 1688
-dev: 114
-test: 139
+train: 1688 \
+dev: 114 \
+test: 139 \
 To reinstall Nvidia driver (if needed) run:
-sudo /opt/deeplearning/install-driver.sh
+`sudo /opt/deeplearning/install-driver.sh`
 
+```
 nvidia-smi
 git clone https://github.com/Andyluchina/Citation_Intent_Classification
 cd Citation_Intent_Classification
@@ -23,7 +24,9 @@ tar -xvf scicite.tar.gz
 python3 train.py
 git status
 
+
 readlink -f bestmodel.npy
 
 y:  Counter({0: 867, 1: 317, 2: 305, 4: 76, 3: 63, 5: 60})
 pred:  Counter({0: 1192, 1: 496})
+```
