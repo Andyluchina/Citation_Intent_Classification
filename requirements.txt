@@ -1,5 +1,5 @@
 torch==1.12.0
 transformers
-torchmetrics
+torchmetrics==0.10.0
 numpy
 torchtext
