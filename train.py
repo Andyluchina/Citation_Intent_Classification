@@ -78,11 +78,11 @@ network = CustomBertClassifier(hidden_dim= 100, bert_dim_size=bert_dim_size, num
 # loss_fn = nn.NLLLoss(weight=torch.tensor([1.0,10.1829653,7.017391304,51.23809524,42.47368421,53.8]).to(device))
 loss_fn = nn.NLLLoss()
 
-optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-6, lr=0.00001)
+optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-7, lr=0.00001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
 n_epochs = 60
-class_factor = 0.4
+class_factor = 0.8
 sum_factor = 0.4
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
@@ -172,7 +172,8 @@ for epoch in range(n_epochs):
         # print(loss_fn(output, y))
         # loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
         # if epoch < 15:    
-        loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + sum_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
+        # loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + sum_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
+        loss = loss_fn(output, y) + class_factor * torch.subtract(torch.sum(y), torch.sum(predictted_output)) + sum_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
         # loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output))))
         # else:
         #     # loss = loss_fn(output, y) + class_factor * max(0.1,1/((epoch-13)/2)) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
