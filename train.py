@@ -75,8 +75,8 @@ network = CustomBertClassifier(hidden_dim= 100, bert_dim_size=bert_dim_size, num
 
 # loss_fn = nn.NLLLoss(weight=torch.tensor([1.0,2.735015773,2.842622951,13.76190476,11.40789474,14.45]).to(device))
 # 1	10.1829653	7.017391304	51.23809524	42.47368421	53.8
-# loss_fn = nn.NLLLoss(weight=torch.tensor([1.0,10.1829653,7.017391304,51.23809524,42.47368421,53.8]).to(device))
-loss_fn = nn.NLLLoss()
+loss_fn = nn.NLLLoss(weight=torch.tensor([1.0,10.1829653,7.017391304,51.23809524,42.47368421,53.8]).to(device))
+# loss_fn = nn.NLLLoss()
 
 optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
@@ -175,7 +175,7 @@ for epoch in range(n_epochs):
         # loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
         # if epoch < 15:    
         # loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + sum_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
-        loss = accuracy_factor * torch.log((torch.subtract(y, predictted_output) != 0).sum()) * loss_fn(output, y) + class_factor * (torch.square(torch.subtract(y, predictted_output)).sum())
+        loss = accuracy_factor * loss_fn(output, y) + class_factor * (torch.square(torch.subtract(y, predictted_output)).sum())
         # loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output))))
         # else:
         #     # loss = loss_fn(output, y) + class_factor * max(0.1,1/((epoch-13)/2)) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
