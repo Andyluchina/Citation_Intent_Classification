@@ -117,6 +117,7 @@ def evaluate_model(network, data, data_object):
         print("Accuracy Loss: ", accuracy_factor * loss_fn(output, y) /  torch.log((torch.subtract(y, predicted) != 0).sum()))
         print("Class Loss: ", class_factor * torch.log(torch.sum(torch.square(torch.subtract(y, predicted)))))
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
+        print(F1Score(num_classes=num_of_output, average='none').to(device))
         # self.output_types2idx = {'Background':3, 'Uses':1, 'CompareOrContrast':2, 'Extends':4, 'Motivation':0, 'Future':5}
         for x in y.cpu().detach().tolist():
             c[str(x)] += 1
