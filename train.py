@@ -84,7 +84,7 @@ scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patienc
 n_epochs = 60
 class_factor = 1.2
 sum_factor = 0.8
-accuracy_factor = 0.1
+accuracy_factor = 1.5
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
 # for parameter in network.parameters():
@@ -113,8 +113,8 @@ def evaluate_model(network, data, data_object):
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         
         _, predicted = torch.max(output, dim=1)
-        loss = accuracy_factor * torch.log((torch.subtract(y, predicted) != 0).sum()) * loss_fn(output, y) + class_factor * (torch.square(torch.subtract(y, predicted)).sum())
-        print("Accuracy Loss: ", accuracy_factor * torch.log(torch.square(torch.subtract(y, predicted)).sum()) * loss_fn(output, y))
+        loss = accuracy_factor * loss_fn(output, y) + class_factor * (torch.square(torch.subtract(y, predicted)).sum())
+        print("Accuracy Loss: ", accuracy_factor * loss_fn(output, y))
         print("Class Loss: ", class_factor * (torch.square(torch.subtract(y, predicted)).sum()))
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         # self.output_types2idx = {'Background':3, 'Uses':1, 'CompareOrContrast':2, 'Extends':4, 'Motivation':0, 'Future':5}
