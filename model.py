@@ -39,7 +39,7 @@ class CustomBertClassifier(nn.Module):
         bert_output = self.model(input_ids=sentences, attention_mask=mask, token_type_ids=token_type_id)
         # extract directly cls token
         bert_output = bert_output[0]
-        cls_tokens = bert_output[torch.arange(bert_output.shape[0]), 0]
+        # cls_tokens = bert_output[torch.arange(bert_output.shape[0]), 0]
         # bert_output = self.model(input_ids=sentences, attention_mask=mask)
         # bert_output = self.model(input_ids=sentences)
         # print(len(bert_output))
@@ -62,7 +62,7 @@ class CustomBertClassifier(nn.Module):
         # print(lstm_output[0,0])
         
         # first_tokens batch X bert_dim_size
-        concat_tokens = torch.concat((first_tokens, citation_tokens, cls_tokens), dim=1)
+        concat_tokens = torch.concat((first_tokens, citation_tokens), dim=1)
         # concat_tokens = torch.flatten(lstm_output,start_dim=1)
         # concat_tokens = citation_tokens
         # concat_tokens batch X 2*bert_dim_size
