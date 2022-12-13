@@ -88,7 +88,7 @@ n_epochs = 80
 class_factor = 0.9
 sum_factor = 0.8
 normalizing_factor = 1
-accuracy_factor = 1.7
+accuracy_factor = 1.5
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
 # for parameter in network.parameters():
