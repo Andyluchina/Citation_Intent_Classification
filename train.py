@@ -54,6 +54,8 @@ bertmodel_name = 'allenai/scibert_scivocab_uncased'
 
 if bertmodel_name == 'bert-base-uncased':
     bert_dim_size = 768
+elif bertmodel_name == 'allenai/scibert_scivocab_uncased':
+    bert_dim_size = 768
 else:
     bert_dim_size = 1024
 

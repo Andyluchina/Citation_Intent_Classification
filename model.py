@@ -40,7 +40,7 @@ class CustomBertClassifier(nn.Module):
         bert_output = self.model(input_ids=sentences, attention_mask=mask, token_type_ids=token_type_id)
         # extract directly cls token
         bert_output = bert_output[0]
-        print(bert_output.shape)
+        # print(bert_output.shape)
         # cls_tokens = bert_output[torch.arange(bert_output.shape[0]), 0]
         # bert_output = self.model(input_ids=sentences, attention_mask=mask)
         # bert_output = self.model(input_ids=sentences)
