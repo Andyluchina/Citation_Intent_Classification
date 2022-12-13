@@ -80,7 +80,7 @@ loss_fn = nn.NLLLoss()
 
 optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 1, factor = 0.8, verbose = True)
 n_epochs = 80
 class_factor = 0.5
 sum_factor = 0.8
