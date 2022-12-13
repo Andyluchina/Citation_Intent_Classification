@@ -46,7 +46,7 @@ class bert_process:
         #  {'0': 3328, '1': 317, '2': 460, '3': 63, '4': 76, '5': 60}
         # {'Background':3, 'Uses':1, 'CompareOrContrast':2, 'Extends':4, 'Motivation':0, 'Future':5}
         # self.output_types2idx = {'Background':0, 'Uses':1, 'CompareOrContrast':2, 'Extends':3, 'Motivation':4, 'Future':5}
-        self.output_types2idx = {'Background':0, 'Uses':1, 'CompareOrContrast':2, 'Extends':3, 'Motivation':5, 'Future':4}
+        self.output_types2idx = {'Background':0, 'Uses':1, 'CompareOrContrast':2, 'Extends':3, 'Motivation':4, 'Future':5}
 
         # self.output_types2idx = {'Background':2, 'Uses':4, 'CompareOrContrast':1, 'Extends':5, 'Motivation':3, 'Future':0}
         self.mask = None
