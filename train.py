@@ -181,7 +181,7 @@ for epoch in range(n_epochs):
         # loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
         # if epoch < 15:    
         # loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + sum_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
-        loss = accuracy_factor * loss_fn(output, y) / torch.log(normalizing_factor * torch.absolute(torch.subtract(y, predictted_output)).sum()) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + class_factor * torch.square(torch.subtract(y, predicted)).sum()
+        loss = accuracy_factor * loss_fn(output, y) / torch.log(normalizing_factor * torch.absolute(torch.subtract(y, predictted_output)).sum()) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + class_factor * torch.square(torch.subtract(y, predictted_output)).sum()
         # loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output))))
         # else:
         #     # loss = loss_fn(output, y) + class_factor * max(0.1,1/((epoch-13)/2)) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
