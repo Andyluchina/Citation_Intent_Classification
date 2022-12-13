@@ -35,7 +35,7 @@ class bert_process:
         # print(self.tokenizer(['[SEP]']))
         # self.tokenizer = BertTokenizer.from_pretrained(pretrained_model_name)
         self.citation_id = torch.tensor(8891) # id for citation
-        self.sep_id = torch.tensor(102) # id for [SEP]
+        self.sep_id = torch.tensor(103) # id for [SEP]
         self.cite_pos = [] #citation pisition
 
         self.batch_size = batch_size
