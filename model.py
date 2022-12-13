@@ -2,6 +2,7 @@ from torch import nn, Tensor
 import torch
 import math
 from transformers import BertModel
+from transformers import AutoModel
 
 
 
@@ -19,7 +20,7 @@ class CustomBertClassifier(nn.Module):
         # self.bert_model = model
         self.relu = nn.ReLU()
         self.logsoftmax = nn.LogSoftmax(dim=1)
-        self.model = BertModel.from_pretrained(model_name)
+        self.model = AutoModel.from_pretrained(model_name)
         for name, param in self.model.named_parameters():
             if 'classifier' not in name: # classifier layer
                 param.requires_grad = False
@@ -39,6 +40,7 @@ class CustomBertClassifier(nn.Module):
         bert_output = self.model(input_ids=sentences, attention_mask=mask, token_type_ids=token_type_id)
         # extract directly cls token
         bert_output = bert_output[0]
+        print(bert_output.shape)
         # cls_tokens = bert_output[torch.arange(bert_output.shape[0]), 0]
         # bert_output = self.model(input_ids=sentences, attention_mask=mask)
         # bert_output = self.model(input_ids=sentences)

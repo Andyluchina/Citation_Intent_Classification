@@ -5,7 +5,8 @@ from collections import defaultdict, Counter, OrderedDict
 import re
 from torch.nn.utils.rnn import pad_sequence
 import numpy as np
-from transformers import BertTokenizer
+# from transformers import BertTokenizer
+from transformers import *
 import json
 import matplotlib.pyplot as plt
 
@@ -28,8 +29,12 @@ class bert_process:
 
         self.max_len = max_len
         self.padding = padding
-        self.tokenizer = BertTokenizer.from_pretrained(pretrained_model_name)
-        self.citation_id = torch.tensor(11091) # id for citation
+        # tokenizer = AutoTokenizer.from_pretrained('allenai/scibert_scivocab_uncased')
+        # model = AutoModel.from_pretrained('allenai/scibert_scivocab_uncased')
+        self.tokenizer = AutoTokenizer.from_pretrained('allenai/scibert_scivocab_uncased')
+        # print(self.tokenizer(['[SEP]']))
+        # self.tokenizer = BertTokenizer.from_pretrained(pretrained_model_name)
+        self.citation_id = torch.tensor(8891) # id for citation
         self.sep_id = torch.tensor(102) # id for [SEP]
         self.cite_pos = [] #citation pisition
 
