@@ -3,6 +3,7 @@ from model import CustomBertClassifier
 from data_preprocessing import bert_process
 import torch
 import json
+from tqdm import tqdm
 
 def load_data(path):
 
