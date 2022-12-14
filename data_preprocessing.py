@@ -159,10 +159,11 @@ class bert_process:
 
 
     def repeat_minority(self):
+        repeated = []
         for exa in self.data:
             for _ in range(self.repeat[self.output_types2idx[exa['intent']]]-1):
-                self.data.append(exa)
-                print(exa['intent'])
+                repeated.append(exa)
+        self.data += repeated
 
 
     def index_input(self):
