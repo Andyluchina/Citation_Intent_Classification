@@ -59,8 +59,11 @@ elif bertmodel_name == 'allenai/scibert_scivocab_uncased':
 else:
     bert_dim_size = 1024
 
+
+repeat = [1,1,1,5,4,3]
+
 # train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
-train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name)
+train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name, repeat=repeat)
 train_loader = train.data_loader
 
 dev = bert_process(dev_data, batch_size=bz, pretrained_model_name=bertmodel_name)
@@ -83,12 +86,14 @@ loss_fn = nn.NLLLoss()
 
 optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
+
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 3, factor = 0.8, verbose = True)
 n_epochs = 80
-class_factor = 1.2
+class_factor = 1.4
 sum_factor = 0.8
 normalizing_factor = 1
-accuracy_factor = 2
+accuracy_factor = 8
+
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
 # for parameter in network.parameters():
@@ -117,9 +122,11 @@ def evaluate_model(network, data, data_object):
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         
         _, predicted = torch.max(output, dim=1)
-        loss = accuracy_factor * loss_fn(output, y) / torch.log((torch.subtract(y, predicted)!=0).sum()) + class_factor * (torch.subtract(y, predicted)!=0).sum()
-        print("Accuracy Loss: ", accuracy_factor * loss_fn(output, y) / torch.log((torch.subtract(y, predicted)!=0).sum()))
-        print("Class Loss: ", class_factor * (torch.subtract(y, predicted)!=0).sum())
+
+        loss = accuracy_factor * torch.divide(loss_fn(output, y) , torch.log((torch.subtract(y, predicted)!=0).sum()) ) + class_factor * torch.log(torch.square(torch.subtract(y, predicted)).sum())
+        print("Accuracy Loss: ", accuracy_factor * torch.divide(loss_fn(output, y) , torch.log((torch.subtract(y, predicted)!=0).sum()) ))
+        print("Class Loss: ", class_factor * torch.log(torch.square(torch.subtract(y, predicted)).sum()))
+
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         f1_detailed = F1Score(num_classes=num_of_output, average='none').to(device)
         print("Specifically, ", f1_detailed(predicted, y))
@@ -181,7 +188,9 @@ for epoch in range(n_epochs):
         # loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
         # if epoch < 15:    
         # loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + sum_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
-        loss = accuracy_factor * loss_fn(output, y) / torch.log((torch.subtract(y, predictted_output) != 0).sum()) + class_factor * (torch.subtract(y, predictted_output) != 0).sum()
+        
+        loss = accuracy_factor * torch.divide(loss_fn(output, y) , torch.log((torch.subtract(y, predictted_output)!=0).sum()) )+ class_factor * torch.log(torch.square(torch.subtract(y, predictted_output)).sum())
+
         # loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output))))
         # else:
         #     # loss = loss_fn(output, y) + class_factor * max(0.1,1/((epoch-13)/2)) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))

@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 class bert_process:
 
     def __init__(self, aclarc_data:list, scicite_data=None, confidence_level:float=1, cite2sentence_percent:float=0.15, max_len:int=300, 
-    batch_size:int=1, shuffle:bool=True, pretrained_model_name:str='bert-base-uncased', padding:str='max_length'):
+    batch_size:int=1, shuffle:bool=True, pretrained_model_name:str='bert-base-uncased', padding:str='max_length', repeat:list=[1]*6):
         
         self.data = aclarc_data
         self.scicite_data = scicite_data
@@ -52,8 +52,12 @@ class bert_process:
         self.mask = None
         self.token_type_ids = None
 
+        self.repeat = repeat
+
+
         if self.scicite_data:
             self.clean_add_scicite_data()
+        self.repeat_minority()
         self.index_input()
         self.index_output()
         self.make_data_loader()
@@ -155,6 +159,13 @@ class bert_process:
                 self.data.append(exa)
 
 
+    def repeat_minority(self):
+        repeated = []
+        for exa in self.data:
+            for _ in range(self.repeat[self.output_types2idx[exa['intent']]]-1):
+                repeated.append(exa)
+        self.data += repeated
+
 
     def index_input(self):
         
@@ -179,15 +190,6 @@ class bert_process:
     def index_output(self):
         self.indexed_output = np.array([self.output_types2idx[exa['intent']] for exa in self.data], dtype=np.int32)
 
-        # c = 0
-        # self.indexed_output = np.array([], dtype=np.int32)
-
-        # for exa in self.data:
-        #     w = exa['intent']
-        #     if self.output_types2idx.get(w, -1) == -1:
-        #         self.output_types2idx[w] = c
-        #         c += 1
-        #     self.indexed_output = np.append(self.indexed_output, self.output_types2idx[w])
 
 
     def make_data_loader(self):
@@ -203,11 +205,13 @@ def load_data(path):
 
 
 
-# ACL_TRAIN_PATH = './ACL-ARC/train.jsonl'
-# ACL_TEST_PATH = './ACL-ARC/test.jsonl'
-# ACL_DEV_PATH = './ACL-ARC/dev.jsonl'
+# ACL_TRAIN_PATH = './acl-arc/train.jsonl'
+# ACL_TEST_PATH = './acl-arc/test.jsonl'
+# ACL_DEV_PATH = './acl-arc/dev.jsonl'
 
 # train_data, test_data, dev_data = load_data(ACL_TRAIN_PATH), load_data(ACL_TEST_PATH), load_data(ACL_DEV_PATH)
+
+# print(len(train_data))
 
 
 
@@ -221,29 +225,24 @@ def load_data(path):
 # 6k has label confidence
 # 4.3k label confidence >= 0.75
 # 3.4k label confidence = 1
-# whole='dasd dsa ds ly (Dymkowska et al. sfef fe '
-# place='ly (Dymkowska et al.'
-# a = whole[:12] + "@@CITATION" + whole[32:]
-# print(whole[12:32])
-# print(a)
+
 # tokenizer = BertTokenizer.from_pretrained('bert-large-uncased')
 # model = BertModel.from_pretrained('bert-large-uncased')
+
 # # text = train_data[0]['string']
 # # # text='CITATION'
 # # text='[SEP]'
 # text = "Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , [SEP] Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well ."
-# # # text = ["Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well .",
-# # # "Typical examples are Bulgarian ( @Citation@ ; Simov and Osenova , 2003 ) , Chinese ( Chen et al. , 2003 ) , Danish ( Kromann , 2003 ) , and Swedish ( Nilsson et al. , 2005 ) . Second Sentence is here as well ."]
+
 # # print(text)
+
 # encoded_input = tokenizer(text, padding='max_length', max_length=100)
+
 # for key,val in encoded_input.items():
 #     print(key,val)
 # # print(tokenizer.decode(encoded_input['input_ids']))
 
 
-# # Convert token to vocabulary indices
-# # indexed_tokens = tokenizer.convert_tokens_to_ids(encoded_input)
-# # print(indexed_tokens)
 
 
 # aa = bert_process(None,train_data)
