@@ -60,7 +60,7 @@ else:
     bert_dim_size = 1024
 
 
-repeat = [1,1,1,5,5,5]
+repeat = [1,1,1,5,3,2]
 
 # train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
 train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name, repeat=repeat)
@@ -88,7 +88,7 @@ optimizer = torch.optim.Adam(network.parameters(), weight_decay = 2e-5, lr=0.001
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
 n_epochs = 35
-class_factor = 1.9
+class_factor = 1.8
 sum_factor = 0.8
 normalizing_factor = 1
 accuracy_factor = 1.2
