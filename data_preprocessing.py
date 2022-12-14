@@ -54,6 +54,9 @@ class bert_process:
 
         self.repeat = repeat
 
+        for exa in self.data:
+            
+
         if self.scicite_data:
             self.clean_add_scicite_data()
         self.repeat_minority()
