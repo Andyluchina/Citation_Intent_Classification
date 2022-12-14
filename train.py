@@ -84,9 +84,9 @@ network = CustomBertClassifier(hidden_dim= 100, bert_dim_size=bert_dim_size, num
 # loss_fn = nn.NLLLoss(weight=torch.tensor([1.0,1.0,1.0,1.5,1.5,1.5]).to(device))
 loss_fn = nn.NLLLoss()
 
-optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001)
+optimizer = torch.optim.AdamW(network.parameters(), weight_decay = 1e-2, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 3, factor = 0.5, verbose = True)
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 5, factor = 0.7, verbose = True)
 n_epochs = 80
 class_factor = 1.1
 sum_factor = 0.8
@@ -198,8 +198,8 @@ for epoch in range(n_epochs):
     
     # print("The training loss is ", train_loss.mean())
     network.eval()
-    print("train loss and f1")
-    curr_f1 = evaluate_model(network, train_loader, train)
+    # print("train loss and f1")
+    # curr_f1 = evaluate_model(network, train_loader, train)
     print("dev loss and f1")
     curr_f1 = evaluate_model(network, dev_loader, dev)
     scheduler.step(curr_f1)
