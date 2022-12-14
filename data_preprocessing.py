@@ -162,6 +162,7 @@ class bert_process:
         for exa in self.data:
             for _ in range(self.repeat[self.output_types2idx[exa['intent']]]-1):
                 self.data.append(exa)
+                print(exa['intent'])
 
 
     def index_input(self):
