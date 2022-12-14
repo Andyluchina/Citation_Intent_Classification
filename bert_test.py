@@ -121,5 +121,8 @@ network.load_state_dict(torch.load("./best_models/bestmodel70_1.npy"))
 # print("The best dev f1 is ", best_f1)
 network.to(device)
 network.eval()
+
+print("dev loss and f1")
+curr_f1 = evaluate_model(network, dev_loader, dev)
 print("The test f1 is")
 evaluate_model(network, test_loader, test)

@@ -120,9 +120,9 @@ def evaluate_model(network, data, data_object):
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         
         _, predicted = torch.max(output, dim=1)
-        loss = accuracy_factor * loss_fn(output, y) + class_factor * torch.log((torch.subtract(y, predicted)!=0).sum())
-        print("Accuracy Loss: ", accuracy_factor * loss_fn(output, y))
-        print("Class Loss: ", class_factor * torch.log((torch.subtract(y, predicted) != 0).sum()))
+        loss = accuracy_factor * torch.divide(loss_fn(output, y) , torch.log((torch.subtract(y, predicted)!=0).sum()) ) + class_factor * torch.log(torch.square(torch.subtract(y, predicted)).sum())
+        print("Accuracy Loss: ", accuracy_factor * torch.divide(loss_fn(output, y) , torch.log((torch.subtract(y, predicted)!=0).sum()) ))
+        print("Class Loss: ", class_factor * torch.log(torch.square(torch.subtract(y, predicted)).sum()))
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         f1_detailed = F1Score(num_classes=num_of_output, average='none').to(device)
         print("Specifically, ", f1_detailed(predicted, y))
