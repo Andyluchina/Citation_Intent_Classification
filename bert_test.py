@@ -2,6 +2,14 @@ from transformers import AutoTokenizer
 from model import CustomBertClassifier
 from data_preprocessing import bert_process
 import torch
+import json
+
+def load_data(path):
+
+    data = []
+    for x in open(path, "r"):
+        data.append(json.loads(x))
+    return data
 
 # checking devices
 device = None
