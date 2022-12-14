@@ -126,7 +126,6 @@ def evaluate_model(network, data, data_object):
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         f1_detailed = F1Score(num_classes=num_of_output, average='none').to(device)
         print("Specifically, ", f1_detailed(predicted, y))
-        
         # self.output_types2idx = {'Background':3, 'Uses':1, 'CompareOrContrast':2, 'Extends':4, 'Motivation':0, 'Future':5}
         for x in y.cpu().detach().tolist():
             c[str(x)] += 1
@@ -157,12 +156,9 @@ def evaluate_model(network, data, data_object):
 best_f1 = -1
 curr_f1 = -1
 for epoch in range(n_epochs):
-
     print('Epoch', epoch)
     # train_loss = []
-
     for batch in tqdm(train_loader):
-
         x, y = batch
         network.train()
         assert network.training, 'make sure your network is in train mode with `.train()`'
@@ -200,28 +196,21 @@ for epoch in range(n_epochs):
         loss.backward()
         optimizer.step()
     
-
     # print("The training loss is ", train_loss.mean())
     network.eval()
-
-    print("train loss and f1")
-    curr_f1 = evaluate_model(network, train_loader, train)
-
+    # print("train loss and f1")
+    # curr_f1 = evaluate_model(network, train_loader, train)
     print("dev loss and f1")
     curr_f1 = evaluate_model(network, dev_loader, dev)
-
     scheduler.step(curr_f1)
-
     if curr_f1 > best_f1:
         best_f1 = curr_f1
         torch.save(network.state_dict(), "bestmodel.npy")
-
     print("test loss and f1")
     evaluate_model(network, test_loader, test)
 
 network.load_state_dict(torch.load("bestmodel.npy"))
 print("The best dev f1 is ", best_f1)
-
 network.eval()
 print("The test f1 is")
 evaluate_model(network, test_loader, test)
