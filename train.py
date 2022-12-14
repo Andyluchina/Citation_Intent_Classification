@@ -88,7 +88,7 @@ loss_fn = nn.NLLLoss()
 optimizer = torch.optim.Adam(network.parameters(), weight_decay = 2e-5, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 3, factor = 0.5, verbose = True)
-n_epochs = 35
+n_epochs = 80
 class_factor = 2
 
 sum_factor = 0.8
@@ -156,7 +156,7 @@ def evaluate_model(network, data, data_object):
     losses = np.asarray(losses)
     accus = accus.mean()
     loss = losses.mean()
-    print("Loss : %f, f1 : %f, accuracy: %f" % (loss, f1, accus))
+    print("Loss : %f, f1 : %f, accuracy: %f \n" % (loss, f1, accus))
     return f1
 
 
