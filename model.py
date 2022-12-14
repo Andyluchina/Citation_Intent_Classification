@@ -8,7 +8,7 @@ from transformers import AutoModel
 
 
 class CustomBertClassifier(nn.Module):
-    def __init__(self, hidden_dim= 100, bert_dim_size=768, num_of_output=6, lstm_hidden = 100,proj_size=100, model_name = "bert-base-uncased"):
+    def __init__(self, hidden_dim= 100, bert_dim_size=768, num_of_output=6, lstm_hidden = 160,proj_size=100, model_name = "bert-base-uncased"):
         """
         """
         super(CustomBertClassifier, self).__init__()
@@ -26,7 +26,7 @@ class CustomBertClassifier(nn.Module):
                 param.requires_grad = False
         # self.lstm = nn.LSTM(input_size=lstm_hidden, hidden_size=lstm_hidden, num_layers=4, batch_first=True, dropout=0.25)
         encoder_layer = nn.TransformerEncoderLayer(d_model=lstm_hidden, nhead=4, dim_feedforward=100, dropout=0.2, batch_first=True)
-        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=2)
+        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=3)
     def forward(self, sentences, citation_idxs, mask, token_type_id=None, device="mps"):
         """
         args:
