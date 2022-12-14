@@ -46,8 +46,8 @@ SCICITE_DEV_PATH = './scicite/dev.jsonl'
 
 train_data_sci, test_data_sci, dev_data_sci = load_data(SCICITE_TRAIN_PATH), load_data(SCICITE_TEST_PATH), load_data(SCICITE_DEV_PATH)
 
-# train_data, test_data, dev_data = train_data[:40], test_data, dev_data
-bz = 290
+
+bz = 512
 # bertmodel_name = 'bert-large-uncased'
 bertmodel_name = 'allenai/scibert_scivocab_uncased'
 # bertmodel_name = 'bert-base-uncased'
@@ -87,7 +87,7 @@ loss_fn = nn.NLLLoss()
 
 optimizer = torch.optim.Adam(network.parameters(), weight_decay = 2e-5, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 3, factor = 0.5, verbose = True)
 n_epochs = 35
 class_factor = 2
 
@@ -100,8 +100,12 @@ pytorch_total_params = sum(p.numel() for p in network.parameters())
 print("all number of params ", pytorch_total_params)
 pytorch_total_params = sum(p.numel() for p in network.parameters() if p.requires_grad)
 print("Trainable parameters " ,pytorch_total_params)
+
+
+
+
 def evaluate_model(network, data, data_object):
-    batch_size = 0
+
     f1s = []
     losses = []
     accus = []
@@ -155,10 +159,15 @@ def evaluate_model(network, data, data_object):
     print("Loss : %f, f1 : %f, accuracy: %f" % (loss, f1, accus))
     return f1
 
+
+
+
 best_f1 = -1
 curr_f1 = -1
+
 for epoch in range(n_epochs):
-    print('Epoch', epoch)
+
+    print('\n\n\nEpoch', epoch)
     # train_loss = []
     for batch in tqdm(train_loader):
         x, y = batch
@@ -176,10 +185,12 @@ for epoch in range(n_epochs):
         # loss = F.cross_entropy(output, y, weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
         _, predictted_output = torch.max(output, dim=1)
 
-        loss = accuracy_factor * torch.divide(loss_fn(output, y), normalizing_factor * torch.log((torch.subtract(y, predictted_output)!=0).sum()) )+ class_factor * torch.log(torch.square(torch.subtract(y, predictted_output)).sum())
+        loss = accuracy_factor * torch.divide(loss_fn(output, y), normalizing_factor * torch.log((torch.subtract(y, predictted_output)!=0).sum()))+ class_factor * torch.log(torch.square(torch.subtract(y, predictted_output)).sum())
 
         if math.isnan(loss):
-            print(torch.log((torch.subtract(y, predictted_output)!=0).sum()) )
+            print(loss_fn(output, y))
+            print(normalizing_factor * torch.log((torch.subtract(y, predictted_output)!=0).sum()))
+            
             print(torch.divide(loss_fn(output, y), normalizing_factor * torch.log((torch.subtract(y, predictted_output)!=0).sum()) ))
 
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
@@ -189,16 +200,22 @@ for epoch in range(n_epochs):
     
     # print("The training loss is ", train_loss.mean())
     network.eval()
+
     # print("train loss and f1")
     # curr_f1 = evaluate_model(network, train_loader, train)
+
     print("dev loss and f1")
     curr_f1 = evaluate_model(network, dev_loader, dev)
+
     scheduler.step(curr_f1)
+
     if curr_f1 > best_f1:
         best_f1 = curr_f1
         torch.save(network.state_dict(), "bestmodel.npy")
     print("test loss and f1")
     evaluate_model(network, test_loader, test)
+
+
 
 network.load_state_dict(torch.load("bestmodel.npy"))
 print("The best dev f1 is ", best_f1)
