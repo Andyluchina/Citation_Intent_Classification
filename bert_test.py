@@ -108,6 +108,6 @@ def evaluate_model(network, data, data_object):
 
 network.load_state_dict(torch.load("bestmodel.npy"))
 # print("The best dev f1 is ", best_f1)
-# network.eval()
+network.eval()
 print("The test f1 is")
 evaluate_model(network, test_loader, test)
