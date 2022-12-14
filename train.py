@@ -60,7 +60,7 @@ else:
     bert_dim_size = 1024
 
 
-repeat = [1,1,1,5,4,3]
+repeat = [1,2,1,5,4,3]
 
 # train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
 train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name, repeat=repeat)
@@ -91,7 +91,7 @@ n_epochs = 80
 class_factor = 1.4
 sum_factor = 0.8
 normalizing_factor = 1
-accuracy_factor = 1.2
+accuracy_factor = 1.5
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
 # for parameter in network.parameters():
