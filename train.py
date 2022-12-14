@@ -90,7 +90,7 @@ scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patienc
 n_epochs = 35
 class_factor = 2
 sum_factor = 0.8
-normalizing_factor = 1
+normalizing_factor = 0.5
 accuracy_factor = 1.2
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
