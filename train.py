@@ -96,8 +96,7 @@ normalizing_factor = 0.5
 accuracy_factor = 1.2
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
-# for parameter in network.parameters():
-#     print(parameter)
+
 print("all number of params ", pytorch_total_params)
 pytorch_total_params = sum(p.numel() for p in network.parameters() if p.requires_grad)
 print("Trainable parameters " ,pytorch_total_params)
@@ -128,6 +127,7 @@ def evaluate_model(network, data, data_object):
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         f1_detailed = F1Score(num_classes=num_of_output, average='none').to(device)
         print("Specifically, ", f1_detailed(predicted, y))
+
         # self.output_types2idx = {'Background':3, 'Uses':1, 'CompareOrContrast':2, 'Extends':4, 'Motivation':0, 'Future':5}
         for x in y.cpu().detach().tolist():
             c[str(x)] += 1
@@ -170,33 +170,20 @@ for epoch in range(n_epochs):
         y = y.to(device)
         sentences, citation_idxs, mask, token_id_types = x
         sentences, citation_idxs, mask, token_id_types = sentences.to(device), citation_idxs.to(device), mask.to(device),token_id_types.to(device)
-        # print(sentences[0:2])
-        # print(token_id_types[0:2])
+
         output = network(sentences, citation_idxs, mask, token_id_types, device=device)
-        # print(output.shape)
-        # print(y)
-        # print(output)
+
         # loss = F.cross_entropy(output, y, weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
         _, predictted_output = torch.max(output, dim=1)
-        # print(predictted_output)
-        # print(torch.sum(y))
-        # print(torch.sum(predictted_output))
-        # print(class_factor * (torch.sum(y) - torch.sum(predictted_output)))
-        # print(loss_fn(output, y))
-        # loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
-        # if epoch < 15:    
-        # loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + sum_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
+
         loss = accuracy_factor * torch.divide(loss_fn(output, y), normalizing_factor * torch.log((torch.subtract(y, predictted_output)!=0).sum()) )+ class_factor * torch.log(torch.square(torch.subtract(y, predictted_output)).sum())
-        print(torch.log((torch.subtract(y, predictted_output)!=0).sum()) )
-        print(torch.divide(loss_fn(output, y), normalizing_factor * torch.log((torch.subtract(y, predictted_output)!=0).sum()) ))
-        # loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output))))
-        # else:
-        #     # loss = loss_fn(output, y) + class_factor * max(0.1,1/((epoch-13)/2)) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
-        #     loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))) 
+
+        if math.isnan(loss):
+            print(torch.log((torch.subtract(y, predictted_output)!=0).sum()) )
+            print(torch.divide(loss_fn(output, y), normalizing_factor * torch.log((torch.subtract(y, predictted_output)!=0).sum()) ))
 
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
-        # print(loss)
-        # print(loss)
+
         loss.backward()
         optimizer.step()
     
