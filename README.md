@@ -8,15 +8,40 @@ We choose to conduct original research exploring how to improve existing models 
 
 
 ACL ARC dataset size
-train: 1688
-dev: 114
-test: 139
+train: 1688 \
+dev: 114 \
+test: 139 \
 To reinstall Nvidia driver (if needed) run:
-sudo /opt/deeplearning/install-driver.sh
+`sudo /opt/deeplearning/install-driver.sh`
 
+```
 nvidia-smi
 git clone https://github.com/Andyluchina/Citation_Intent_Classification
+cd Citation_Intent_Classification
 pip install -r requirements.txt
+tar -xvf acl-arc.tar.gz 
+tar -xvf scicite.tar.gz 
+screen -S model
+python3 train.py
 
-gzip -dk acltrue.gz
-gzip -dk acltrue.gz
+```
+To resume the session:
+screen -r model 
+
+
+readlink -f bestmodel.npy
+
+y:  Counter({0: 867, 1: 317, 2: 305, 4: 76, 3: 63, 5: 60})
+pred:  Counter({0: 1192, 1: 496})
+```
+
+screen guides
+
+screen -S model 
+///creating a session called model
+Once you have the model running with training script
+Press Ctrl+a+d to detach from the session
+
+if you want to resume the session because of loss of connection, run
+screen -r model 
+////this will resume the session that you were in
