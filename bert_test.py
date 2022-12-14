@@ -1,6 +1,7 @@
 from transformers import AutoTokenizer
 from model import CustomBertClassifier
 from data_preprocessing import bert_process
+import torch
 
 # checking devices
 device = None
