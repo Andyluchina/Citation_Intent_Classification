@@ -60,7 +60,7 @@ else:
     bert_dim_size = 1024
 
 
-repeat = [1,1,1,5,4,3]
+repeat = [1,1,1,5,5,5]
 
 # train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
 train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name, repeat=repeat)
