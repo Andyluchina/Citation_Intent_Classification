@@ -5,6 +5,14 @@ import torch
 import json
 from tqdm import tqdm
 
+
+
+n_epochs = 80
+class_factor = 1.4
+sum_factor = 0.8
+normalizing_factor = 1
+accuracy_factor = 8
+num_of_output = 6
 def load_data(path):
 
     data = []
