@@ -49,8 +49,8 @@ train_data_sci, test_data_sci, dev_data_sci = load_data(SCICITE_TRAIN_PATH), loa
 # train_data, test_data, dev_data = train_data[:40], test_data, dev_data
 bz = 300
 # bertmodel_name = 'bert-large-uncased'
-bertmodel_name = 'allenai/scibert_scivocab_uncased'
-# bertmodel_name = 'bert-base-uncased'
+# bertmodel_name = 'allenai/scibert_scivocab_uncased'
+bertmodel_name = 'bert-base-uncased'
 
 if bertmodel_name == 'bert-base-uncased':
     bert_dim_size = 768
@@ -153,6 +153,8 @@ def evaluate_model(network, data, data_object):
     print("Loss : %f, f1 : %f, accuracy: %f" % (loss, f1, accus))
     return f1
 
+f1_dump = []
+
 best_f1 = -1
 curr_f1 = -1
 for epoch in range(n_epochs):
@@ -203,12 +205,18 @@ for epoch in range(n_epochs):
     # curr_f1 = evaluate_model(network, train_loader, train)
     print("dev loss and f1")
     curr_f1 = evaluate_model(network, dev_loader, dev)
+
+    f1_dump.append({"Epoch": epoch, "Dev F1": float(curr_f1)})
+
     scheduler.step(curr_f1)
     if curr_f1 > best_f1:
         best_f1 = curr_f1
         torch.save(network.state_dict(), "bestmodel.npy")
     print("test loss and f1")
     evaluate_model(network, test_loader, test)
+
+with open("stable70_new_loss_bert_base_dev_f1.json", "w") as outfile:
+    outfile.write(json.dumps(f1_dump, indent=4))
 
 network.load_state_dict(torch.load("bestmodel.npy"))
 print("The best dev f1 is ", best_f1)
