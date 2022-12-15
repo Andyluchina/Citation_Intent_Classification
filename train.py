@@ -47,7 +47,7 @@ SCICITE_DEV_PATH = './scicite/dev.jsonl'
 train_data_sci, test_data_sci, dev_data_sci = load_data(SCICITE_TRAIN_PATH), load_data(SCICITE_TEST_PATH), load_data(SCICITE_DEV_PATH)
 
 # train_data, test_data, dev_data = train_data[:40], test_data, dev_data
-bz = 200
+bz = 300
 # bertmodel_name = 'bert-large-uncased'
 bertmodel_name = 'allenai/scibert_scivocab_uncased'
 # bertmodel_name = 'bert-base-uncased'
@@ -88,7 +88,7 @@ optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
 n_epochs = 40
-class_factor = 2.5
+class_factor = 4
 sum_factor = 0.8
 normalizing_factor = 0.5
 accuracy_factor = 1.2
