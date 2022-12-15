@@ -13,7 +13,7 @@ class CustomBertClassifier(nn.Module):
         """
         super(CustomBertClassifier, self).__init__()
         self.dropout = nn.Dropout(p=0.2)
-        self.linear1 = nn.Linear(2*lstm_hidden, hidden_dim)
+        self.linear1 = nn.Linear(2*lstm_hidden+bert_dim_size, hidden_dim)
         self.linear2 = nn.Linear(hidden_dim, hidden_dim)
         self.linear3 = nn.Linear(hidden_dim, num_of_output)
         self.linear_bert = nn.Linear(bert_dim_size, lstm_hidden)
@@ -41,7 +41,7 @@ class CustomBertClassifier(nn.Module):
         # extract directly cls token
         bert_output = bert_output[0]
         # print(bert_output.shape)
-        # cls_tokens = bert_output[torch.arange(bert_output.shape[0]), 0]
+        cls_tokens = bert_output[torch.arange(bert_output.shape[0]), 0]
         # bert_output = self.model(input_ids=sentences, attention_mask=mask)
         # bert_output = self.model(input_ids=sentences)
         # print(len(bert_output))
@@ -64,7 +64,7 @@ class CustomBertClassifier(nn.Module):
         # print(lstm_output[0,0])
         
         # first_tokens batch X bert_dim_size
-        concat_tokens = torch.concat((first_tokens, citation_tokens), dim=1)
+        concat_tokens = torch.concat((cls_tokens, first_tokens, citation_tokens), dim=1)
         # concat_tokens = torch.flatten(lstm_output,start_dim=1)
         # concat_tokens = citation_tokens
         # concat_tokens batch X 2*bert_dim_size
