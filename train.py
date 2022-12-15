@@ -87,7 +87,7 @@ loss_fn = nn.NLLLoss()
 optimizer = torch.optim.Adam(network.parameters(), weight_decay = 2e-5, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
-n_epochs = 60
+n_epochs = 3
 class_factor = 2
 sum_factor = 0.8
 normalizing_factor = 0.5
@@ -153,6 +153,8 @@ def evaluate_model(network, data, data_object):
     print("Loss : %f, f1 : %f, accuracy: %f" % (loss, f1, accus))
     return f1
 
+f1_dump = []
+
 best_f1 = -1
 curr_f1 = -1
 for epoch in range(n_epochs):
@@ -203,12 +205,18 @@ for epoch in range(n_epochs):
     # curr_f1 = evaluate_model(network, train_loader, train)
     print("dev loss and f1")
     curr_f1 = evaluate_model(network, dev_loader, dev)
+
+    f1_dump.append({"Epoch": epoch, "Dev F1": curr_f1})
+
     scheduler.step(curr_f1)
     if curr_f1 > best_f1:
         best_f1 = curr_f1
         torch.save(network.state_dict(), "bestmodel.npy")
     print("test loss and f1")
     evaluate_model(network, test_loader, test)
+
+with open("dev_f1.json", "w") as outfile:
+    outfile.write(json.dumps(f1_dump, indent=4))
 
 network.load_state_dict(torch.load("bestmodel.npy"))
 print("The best dev f1 is ", best_f1)
