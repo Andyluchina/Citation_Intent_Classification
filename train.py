@@ -63,7 +63,7 @@ else:
 repeat = [1,1,1,5,3,2]
 
 # train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
-train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name, repeat=repeat)
+train = bert_process(train_data, None ,batch_size=bz, pretrained_model_name=bertmodel_name, repeat=repeat)
 train_loader = train.data_loader
 
 dev = bert_process(dev_data, batch_size=bz, pretrained_model_name=bertmodel_name)
