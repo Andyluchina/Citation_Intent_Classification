@@ -47,7 +47,7 @@ SCICITE_DEV_PATH = './scicite/dev.jsonl'
 train_data_sci, test_data_sci, dev_data_sci = load_data(SCICITE_TRAIN_PATH), load_data(SCICITE_TEST_PATH), load_data(SCICITE_DEV_PATH)
 
 # train_data, test_data, dev_data = train_data[:40], test_data, dev_data
-bz = 200
+bz = 300
 # bertmodel_name = 'bert-large-uncased'
 bertmodel_name = 'allenai/scibert_scivocab_uncased'
 # bertmodel_name = 'bert-base-uncased'
@@ -185,7 +185,7 @@ for epoch in range(n_epochs):
         # if epoch < 15:    
         # loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + sum_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
 
-        loss = accuracy_factor * loss_fn(output, y) * torch.pow(torch.tensor(1.8) ,((torch.subtract(y, predictted_output) == 0).sum())/bz) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum())/bz * torch.log(torch.square(torch.subtract(y, predictted_output)).sum())
+        loss = accuracy_factor * loss_fn(output, y) * torch.pow(torch.tensor(2) ,((torch.subtract(y, predictted_output) == 0).sum())/bz) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum())/bz * torch.log(torch.square(torch.subtract(y, predictted_output)).sum())
         # loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output))))
         # else:
         #     # loss = loss_fn(output, y) + class_factor * max(0.1,1/((epoch-13)/2)) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
