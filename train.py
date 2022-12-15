@@ -206,7 +206,7 @@ for epoch in range(n_epochs):
     print("dev loss and f1")
     curr_f1 = evaluate_model(network, dev_loader, dev)
 
-    f1_dump.append({"Epoch": epoch, "Dev F1": curr_f1})
+    f1_dump.append({"Epoch": epoch, "Dev F1": float(curr_f1)})
 
     scheduler.step(curr_f1)
     if curr_f1 > best_f1:
