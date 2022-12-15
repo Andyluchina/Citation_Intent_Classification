@@ -47,7 +47,7 @@ SCICITE_DEV_PATH = './scicite/dev.jsonl'
 train_data_sci, test_data_sci, dev_data_sci = load_data(SCICITE_TRAIN_PATH), load_data(SCICITE_TEST_PATH), load_data(SCICITE_DEV_PATH)
 
 # train_data, test_data, dev_data = train_data[:40], test_data, dev_data
-bz = 300
+bz = 200
 # bertmodel_name = 'bert-large-uncased'
 bertmodel_name = 'allenai/scibert_scivocab_uncased'
 # bertmodel_name = 'bert-base-uncased'
@@ -84,14 +84,14 @@ network = CustomBertClassifier(hidden_dim= 100, bert_dim_size=bert_dim_size, num
 # loss_fn = nn.NLLLoss(weight=torch.tensor([1.0,1.0,1.0,1.5,1.5,1.5]).to(device))
 loss_fn = nn.NLLLoss()
 
-optimizer = torch.optim.Adam(network.parameters(), weight_decay = 5e-6, lr=0.001)
+optimizer = torch.optim.Adam(network.parameters(), weight_decay = 2e-5, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
 n_epochs = 40
-class_factor = 2.5
+class_factor = 4
 sum_factor = 0.8
 normalizing_factor = 0.5
-accuracy_factor = 1.2
+accuracy_factor = 1.5
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
 # for parameter in network.parameters():
@@ -185,7 +185,7 @@ for epoch in range(n_epochs):
         # if epoch < 15:    
         # loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + sum_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
 
-        loss = accuracy_factor * loss_fn(output, y) * torch.pow(torch.tensor(2) ,((torch.subtract(y, predictted_output) == 0).sum())/bz) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum())/bz * torch.log(torch.square(torch.subtract(y, predictted_output)).sum())
+        loss = accuracy_factor * loss_fn(output, y) * torch.pow(torch.tensor(2.5) ,((torch.subtract(y, predictted_output) == 0).sum())/bz) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum())/bz * torch.log(torch.square(torch.subtract(y, predictted_output)).sum())
         # loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output))))
         # else:
         #     # loss = loss_fn(output, y) + class_factor * max(0.1,1/((epoch-13)/2)) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
