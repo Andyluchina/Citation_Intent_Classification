@@ -211,7 +211,7 @@ for epoch in range(n_epochs):
     print("test loss and f1")
     evaluate_model(network, test_loader, test)
 
-with open("plots_data/stable70_new_loss_scibert_dev_f1.json", "w") as outfile:
+with open("bert_base_new_loss_dev_f1.json", "w") as outfile:
     outfile.write(json.dumps(f1_dump, indent=4))
 
 network.load_state_dict(torch.load("bestmodel.npy"))
