@@ -6,6 +6,8 @@ Understanding how a scientific publication has been used allows for more informe
 
 We choose to conduct original research exploring how to improve existing models for citation intent classification in scientific publications. We will specifically focus on how to obtain such improvements by integrating BERT and Transformer Neural Networks on top of models that use Bi-LSTM and Multilayer Perceptrons (MLP). Our goal is to determine whether adding improvements such as BERT and Transformer Neural Networks improve the F1 score that was achieved by the Cohan, 2019 paper, which was 67.9.
 
+Our trained model can be found at https://tinyurl.com/citationIntentBestModel
+
 ACL ARC dataset size
 train: 1688 \
 dev: 114 \
