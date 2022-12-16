@@ -57,6 +57,8 @@ elif bertmodel_name == 'allenai/scibert_scivocab_uncased':
 else:
     bert_dim_size = 1024
 
+dev = bert_process(dev_data, batch_size=bz, pretrained_model_name=bertmodel_name)
+dev_loader = dev.data_loader
 
 test = bert_process(test_data, batch_size=bz, pretrained_model_name=bertmodel_name)
 test_loader = test.data_loader
