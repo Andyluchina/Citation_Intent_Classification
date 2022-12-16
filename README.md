@@ -12,9 +12,10 @@ Our trained model can be found at https://tinyurl.com/citationIntentBestModel
 
 # Training
 ACL ARC dataset size
-train: 1688 \
-dev: 114 \
-test: 139 \
+- train: 1688
+- dev: 114
+- test: 139
+
 To reinstall Nvidia driver (if needed) run:
 `sudo /opt/deeplearning/install-driver.sh`
 
