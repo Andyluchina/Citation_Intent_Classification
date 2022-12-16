@@ -43,7 +43,7 @@ ACL ARC dataset size
 To reinstall Nvidia driver (if needed) run:
 `sudo /opt/deeplearning/install-driver.sh`
 
-To run the training script. Note that you probably need a gpu to acutally do this
+Enter the following to run the training script. You need a GPU to do this.
 ```
 nvidia-smi
 git clone https://github.com/Andyluchina/Citation_Intent_Classification
@@ -56,7 +56,9 @@ python3 train.py
 ```
 # Inference
 To run inference on the test set of the acl dataset run
-```python3 bert_test.py```
+```
+python3 bert_test.py
+```
 
 # Using `screen`
 Purpose of this section: To avoid losing progress when you accidentally leave Cloud Shell
