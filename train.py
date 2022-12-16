@@ -47,7 +47,7 @@ SCICITE_DEV_PATH = './scicite/dev.jsonl'
 train_data_sci, test_data_sci, dev_data_sci = load_data(SCICITE_TRAIN_PATH), load_data(SCICITE_TEST_PATH), load_data(SCICITE_DEV_PATH)
 
 # train_data, test_data, dev_data = train_data[:40], test_data, dev_data
-bz = 290
+bz = 300
 # bertmodel_name = 'bert-large-uncased'
 bertmodel_name = 'allenai/scibert_scivocab_uncased'
 # bertmodel_name = 'bert-base-uncased'
@@ -60,7 +60,7 @@ else:
     bert_dim_size = 1024
 
 
-repeat = [1,1,1,5,4,3]
+repeat = [1,1,1,5,3,2]
 
 # train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
 train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name, repeat=repeat)
@@ -87,12 +87,12 @@ loss_fn = nn.NLLLoss()
 optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 3, factor = 0.8, verbose = True)
-n_epochs = 80
-class_factor = 1.4
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
+n_epochs = 40
+class_factor = 1.5
 sum_factor = 0.8
-normalizing_factor = 1
-accuracy_factor = 8
+normalizing_factor = 0.5
+accuracy_factor = 1.2
 
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
@@ -123,9 +123,9 @@ def evaluate_model(network, data, data_object):
         
         _, predicted = torch.max(output, dim=1)
 
-        loss = accuracy_factor * torch.divide(loss_fn(output, y) , torch.log((torch.subtract(y, predicted)!=0).sum()) ) + class_factor * torch.log(torch.square(torch.subtract(y, predicted)).sum())
-        print("Accuracy Loss: ", accuracy_factor * torch.divide(loss_fn(output, y) , torch.log((torch.subtract(y, predicted)!=0).sum()) ))
-        print("Class Loss: ", class_factor * torch.log(torch.square(torch.subtract(y, predicted)).sum()))
+        loss = accuracy_factor * loss_fn(output, y) + class_factor * torch.log((torch.subtract(y, predicted)!=0).sum())
+        print("Accuracy Loss: ", accuracy_factor * loss_fn(output, y))
+        print("Class Loss: ", class_factor * torch.log((torch.subtract(y, predicted) != 0).sum()))
 
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         f1_detailed = F1Score(num_classes=num_of_output, average='none').to(device)
@@ -188,8 +188,8 @@ for epoch in range(n_epochs):
         # loss = loss_fn(output, y) + class_factor * torch.absolute(torch.sum(y) - torch.sum(predictted_output))
         # if epoch < 15:    
         # loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + sum_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
-        
-        loss = accuracy_factor * torch.divide(loss_fn(output, y) , torch.log((torch.subtract(y, predictted_output)!=0).sum()) )+ class_factor * torch.log(torch.square(torch.subtract(y, predictted_output)).sum())
+
+        loss = accuracy_factor * loss_fn(output, y) * torch.pow(torch.tensor(1.8) ,((torch.subtract(y, predictted_output) == 0).sum())/bz) + class_factor * torch.exp(((torch.subtract(y, predictted_output) != 0).sum())/bz) * torch.log(torch.square(torch.subtract(y, predictted_output)).sum())
 
         # loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output))))
         # else:
