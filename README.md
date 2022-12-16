@@ -10,6 +10,31 @@ We choose to conduct original research exploring how to improve existing models 
 # Trained model
 Our trained model can be found at https://tinyurl.com/citationIntentBestModel
 
+# Before you train: Preparing a Google Compute Engine VM instance
+Optional: Do this if you have no GPU.
+## I. Create a virtual machine (VM) on Google cloud
+1. Go [here](https://gcp.secure.force.com/GCPEDU?cid=8qQrEkGd0H8GsvikMXIrOhFp89a11IvCa2lptANyWistTURZnoe01KKeoznU836Q/) to redeem your $50 coupon for Google Cloud.
+2. Create a project:
+    - Go to [Manage Resources page](https://console.cloud.google.com/cloud-resource-manager?walkthrough_id=resource-manager--create-project)
+    - Follow [these steps](https://cloud.google.com/resource-manager/docs/creating-managing-projects#creating_a_project).
+3. Create a VM.
+    - Go to this to set up your VM. `https://console.cloud.google.com/compute/instancesAdd?project=<YOUR_PROJECT_NAME>`
+    - GCP will give you several options for creating a VM. Make these changes:
+        - Region: `us-west1 (Oregon)`
+        - Zone: `us-west1-a`
+        - Machine family: `GPU`
+        - GPU type: `NVIDIA V100`
+        - Machine type: `n1-standard-8`
+        - Boot disk: Click `SWITCH IMAGE`. A panel will appear:
+            - Operating system: `Deep Learning on Linux`
+            - Version: `Debian 10 based Deep Learning VM with M101`
+            - Size (GB): `50`
+        - Access scopes: `Allow full access to all Cloud APIs`
+        - Firewall: `Allow HTTP traffic` and `Allow HTTPS traffic`
+    - Click `CREATE`.
+4. Your VM will appear in the [Compute Engine page](https://console.cloud.google.com/compute/instances).
+
+
 # Training
 ACL ARC dataset size
 - train: 1688
