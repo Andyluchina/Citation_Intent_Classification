@@ -30,11 +30,5 @@ Hi! :wave: Here's a quick and dirty guide to get to started experimenting with t
 3. `cd Citation_Intent_Classification`
 4. Create a branch for you to make changes: `git checkout -b experiment/<YOUR_NAME>`
 
-## III. Experiment
-Here are some key places you can tinker with:
-- train.py: check out learning rates, weight decay, regularization
-
-Once you've got a hang of those, you can create more substantial changes for your experiments.
-
-## IV. SUPER IMPORTANT: Delete your VM when not in use!
+## III. SUPER IMPORTANT: Delete your VM when not in use!
 When you're done experimenting, you'll want to delete your VM. It costs $2 per hour when it's on. We don't know how much it costs when it's off but we'd rather be safe.
