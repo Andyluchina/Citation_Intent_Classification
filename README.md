@@ -11,8 +11,7 @@ We choose to conduct original research exploring how to improve existing models 
 Our trained model can be found at https://tinyurl.com/citationIntentBestModel
 
 # Before you train: Preparing a Google Compute Engine VM instance
-Optional: Do this if you have no GPU.
-## I. Create a virtual machine (VM) on Google cloud
+**Optional**: Do this if you have no GPU.
 1. Go [here](https://gcp.secure.force.com/GCPEDU?cid=8qQrEkGd0H8GsvikMXIrOhFp89a11IvCa2lptANyWistTURZnoe01KKeoznU836Q/) to redeem your $50 coupon for Google Cloud.
 2. Create a project:
     - Go to [Manage Resources page](https://console.cloud.google.com/cloud-resource-manager?walkthrough_id=resource-manager--create-project)
@@ -33,7 +32,7 @@ Optional: Do this if you have no GPU.
         - Firewall: `Allow HTTP traffic` and `Allow HTTPS traffic`
     - Click `CREATE`.
 4. Your VM will appear in the [Compute Engine page](https://console.cloud.google.com/compute/instances).
-
+5. SSH into your VM. There's a little `SSH` button to the far right next to your VM name.
 
 # Training
 ACL ARC dataset size
