@@ -25,6 +25,9 @@ screen -S model
 python3 train.py
 
 To run inference on the test set of the acl dataset run 
+python3 bert_test.py
+
+this will run inference on acl test set
 
 ```
 To resume the session:
