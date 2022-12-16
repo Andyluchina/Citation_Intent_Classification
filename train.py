@@ -86,12 +86,14 @@ loss_fn = nn.NLLLoss()
 
 optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
+
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
 n_epochs = 40
 class_factor = 1.5
 sum_factor = 0.8
 normalizing_factor = 0.5
 accuracy_factor = 1.2
+
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
 # for parameter in network.parameters():
@@ -120,9 +122,11 @@ def evaluate_model(network, data, data_object):
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         
         _, predicted = torch.max(output, dim=1)
+
         loss = accuracy_factor * loss_fn(output, y) + class_factor * torch.log((torch.subtract(y, predicted)!=0).sum())
         print("Accuracy Loss: ", accuracy_factor * loss_fn(output, y))
         print("Class Loss: ", class_factor * torch.log((torch.subtract(y, predicted) != 0).sum()))
+
         f1 = F1Score(num_classes=num_of_output, average='macro').to(device)
         f1_detailed = F1Score(num_classes=num_of_output, average='none').to(device)
         print("Specifically, ", f1_detailed(predicted, y))
@@ -186,6 +190,7 @@ for epoch in range(n_epochs):
         # loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + sum_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
 
         loss = accuracy_factor * loss_fn(output, y) * torch.pow(torch.tensor(1.8) ,((torch.subtract(y, predictted_output) == 0).sum())/bz) + class_factor * torch.exp(((torch.subtract(y, predictted_output) != 0).sum())/bz) * torch.log(torch.square(torch.subtract(y, predictted_output)).sum())
+
         # loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output))))
         # else:
         #     # loss = loss_fn(output, y) + class_factor * max(0.1,1/((epoch-13)/2)) * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
