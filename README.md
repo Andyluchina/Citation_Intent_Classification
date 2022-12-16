@@ -1,4 +1,4 @@
-Introduction and Motivation
+# Introduction and Motivation
 
 How a scientific publication is cited in another document is important in assessing the former’s impact. Automated analysis of scientific literature must include metrics showing how, not just how many times, a certain publication has been cited - whether as a direct use of a method in that publication, serving as an acknowledgement of previously conducted, or other ways (Cohan, 2019). This type of classification is known as “Citation Intent Classification.”
 
@@ -6,8 +6,11 @@ Understanding how a scientific publication has been used allows for more informe
 
 We choose to conduct original research exploring how to improve existing models for citation intent classification in scientific publications. We will specifically focus on how to obtain such improvements by integrating BERT and Transformer Neural Networks on top of models that use Bi-LSTM and Multilayer Perceptrons (MLP). Our goal is to determine whether adding improvements such as BERT and Transformer Neural Networks improve the F1 score that was achieved by the Cohan, 2019 paper, which was 67.9.
 
+
+# Trained model
 Our trained model can be found at https://tinyurl.com/citationIntentBestModel
 
+# About the data
 ACL ARC dataset size
 train: 1688 \
 dev: 114 \
