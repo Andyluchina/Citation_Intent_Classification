@@ -117,7 +117,7 @@ def evaluate_model(network, data, data_object):
     print("Loss : %f, f1 : %f, accuracy: %f" % (loss, f1, accus))
     return f1
 
-network.load_state_dict(torch.load("./best_models/bestmodel70_1.npy"))
+network.load_state_dict(torch.load("./best_models/bestmodel.npy"))
 # print("The best dev f1 is ", best_f1)
 network.to(device)
 network.eval()
