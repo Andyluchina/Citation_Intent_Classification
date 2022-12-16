@@ -12,6 +12,8 @@ Our main contributions are: 1) proposing a novel model that achieves high perfor
 # Trained model
 Our trained model can be found at https://tinyurl.com/citationIntentBestModel
 
+**IMPORTANT!** If you want to use this model for inference, you need to add it to your copy of this repo, and rename it to `bestmodel.npy`
+
 # Before you train: Preparing a Google Compute Engine VM instance
 **Optional**: Do this if you have no GPU.
 1. Go [here](https://gcp.secure.force.com/GCPEDU?cid=8qQrEkGd0H8GsvikMXIrOhFp89a11IvCa2lptANyWistTURZnoe01KKeoznU836Q/) to redeem your $50 coupon for Google Cloud.
