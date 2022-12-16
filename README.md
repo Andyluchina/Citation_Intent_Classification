@@ -6,7 +6,6 @@ Understanding how a scientific publication has been used allows for more informe
 
 We choose to conduct original research exploring how to improve existing models for citation intent classification in scientific publications. We will specifically focus on how to obtain such improvements by integrating BERT and Transformer Neural Networks on top of models that use Bi-LSTM and Multilayer Perceptrons (MLP). Our goal is to determine whether adding improvements such as BERT and Transformer Neural Networks improve the F1 score that was achieved by the Cohan, 2019 paper, which was 67.9.
 
-
 ACL ARC dataset size
 train: 1688 \
 dev: 114 \
@@ -14,6 +13,7 @@ test: 139 \
 To reinstall Nvidia driver (if needed) run:
 `sudo /opt/deeplearning/install-driver.sh`
 
+To run the training script. Note that you probably need a gpu to acutally do this
 ```
 nvidia-smi
 git clone https://github.com/Andyluchina/Citation_Intent_Classification
@@ -24,10 +24,11 @@ tar -xvf scicite.tar.gz
 screen -S model
 python3 train.py
 
+To run inference on the test set of the acl dataset run 
+
 ```
 To resume the session:
 screen -r model 
-
 
 readlink -f bestmodel.npy
 
@@ -45,3 +46,4 @@ Press Ctrl+a+d to detach from the session
 if you want to resume the session because of loss of connection, run
 screen -r model 
 ////this will resume the session that you were in
+
