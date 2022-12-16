@@ -21,7 +21,7 @@ cd Citation_Intent_Classification
 pip install -r requirements.txt
 tar -xvf acl-arc.tar.gz 
 tar -xvf scicite.tar.gz 
-screen -S model
+screen -S modelgit
 python3 train.py
 
 ```

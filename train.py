@@ -60,7 +60,7 @@ else:
     bert_dim_size = 1024
 
 
-repeat = [1,1,1,1,1,1]
+repeat = [1,1,1,5,3,2]
 
 # train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
 train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name, repeat=repeat)
@@ -215,7 +215,7 @@ for epoch in range(n_epochs):
     print("test loss and f1")
     evaluate_model(network, test_loader, test)
 
-with open("stable70_new_loss_no_repeat_minority_classes_dev_f1.json", "w") as outfile:
+with open("stable70_new_loss_repeat_minority_classes_dev_f1.json", "w") as outfile:
     outfile.write(json.dumps(f1_dump, indent=4))
 
 network.load_state_dict(torch.load("bestmodel.npy"))
