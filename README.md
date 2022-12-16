@@ -10,7 +10,7 @@ We choose to conduct original research exploring how to improve existing models 
 # Trained model
 Our trained model can be found at https://tinyurl.com/citationIntentBestModel
 
-# About the data
+# Training
 ACL ARC dataset size
 train: 1688 \
 dev: 114 \
@@ -29,11 +29,14 @@ tar -xvf scicite.tar.gz
 screen -S model
 python3 train.py
 
+# Inference
 To run inference on the test set of the acl dataset run 
 python3 bert_test.py
 
 this will run inference on acl test set
 
+# Using `screen`
+Purpose of this section: To avoid losing progress when you accidentally leave Cloud Shell
 ```
 To resume the session:
 screen -r model 
