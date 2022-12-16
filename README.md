@@ -28,12 +28,10 @@ tar -xvf acl-arc.tar.gz
 tar -xvf scicite.tar.gz 
 screen -S model
 python3 train.py
-
+```
 # Inference
-To run inference on the test set of the acl dataset run 
-python3 bert_test.py
-
-this will run inference on acl test set
+To run inference on the test set of the acl dataset run
+```python3 bert_test.py```
 
 # Using `screen`
 Purpose of this section: To avoid losing progress when you accidentally leave Cloud Shell
@@ -48,7 +46,7 @@ pred:  Counter({0: 1192, 1: 496})
 ```
 
 screen guides
-
+```
 screen -S model 
 ///creating a session called model
 Once you have the model running with training script
@@ -57,4 +55,5 @@ Press Ctrl+a+d to detach from the session
 if you want to resume the session because of loss of connection, run
 screen -r model 
 ////this will resume the session that you were in
+```
 
