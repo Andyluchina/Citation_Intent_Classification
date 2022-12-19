@@ -62,7 +62,7 @@ else:
     bert_dim_size = 1024
 
 
-repeat = [1,1,1,5,3,2]
+repeat = [1,1,1,3,2,2]
 
 # train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
 train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name, repeat=repeat)
@@ -111,13 +111,13 @@ tokenizer = AutoTokenizer.from_pretrained('allenai/scibert_scivocab_uncased')
 output_sematics = [
    'Background: introduce related information about a subject',
    'Uses: introduce applications about a subject', 
-   'Compare Or Contrast', 
-   'Extends',
+   'Compare Or Contrast: compare the similarities and differences between the current subject and something else', 
+   'Extends: introduces additions and extensions to the current subject',
    'Motivation: introduce reasons why certain subject is important', 
    'Future: introduce additional work that can be done in the future'
 ]
 
-encoded_labels = tokenizer(output_sematics, padding = 'max_length', max_length = 15, return_tensors='pt')
+encoded_labels = tokenizer(output_sematics, padding = 'max_length', max_length = 20, return_tensors='pt')
 
 print(encoded_labels)
 
@@ -132,7 +132,7 @@ mask =mask.to(device)
 
 res = scibert(input_ids=inputs, attention_mask=mask)
 bert_output = res[0]
-output_matrix = bert_output[torch.arange(bert_output.shape[0]), 0]
+output_matrix = bert_output[torch.arange(bert_output.shape[0]), 1]
 
 print("generating output_matrix of shape")
 output_matrix.require_grad = False
