@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 from collections import defaultdict, Counter, OrderedDict
 import torch.nn.functional as F
 import math
+from transformers import AutoTokenizer
+from transformers import AutoModel
 
 # checking devices
 device = None
@@ -101,6 +103,40 @@ pytorch_total_params = sum(p.numel() for p in network.parameters())
 print("all number of params ", pytorch_total_params)
 pytorch_total_params = sum(p.numel() for p in network.parameters() if p.requires_grad)
 print("Trainable parameters " ,pytorch_total_params)
+
+
+# generate output_matrix
+tokenizer = AutoTokenizer.from_pretrained('allenai/scibert_scivocab_uncased')
+
+output_sematics = [
+   'Background',
+   'Uses', 
+   'Compare Or Contrast', 
+   'Extends',
+   'Motivation', 
+   'Future'
+]
+
+encoded_labels = tokenizer(output_sematics, padding = 'max_length', max_length = 5, return_tensors='pt')
+
+print(encoded_labels)
+
+inputs = encoded_labels['input_ids']
+mask = encoded_labels['attention_mask']
+
+scibert = AutoModel.from_pretrained('allenai/scibert_scivocab_uncased')
+scibert.to(device)
+
+inputs = inputs.to(device)
+mask =mask.to(device)
+
+res = scibert(input_ids=inputs, attention_mask=mask)
+bert_output = res[0]
+output_matrix = bert_output[torch.arange(bert_output.shape[0]), 0]
+
+print("generating output_matrix of shape")
+print(output_matrix.shape)
+# end of generate output_matrix
 def evaluate_model(network, data, data_object):
     batch_size = 0
     f1s = []
@@ -117,7 +153,7 @@ def evaluate_model(network, data, data_object):
         y = y.to(device)
         sentences, citation_idxs, mask, token_id_types = x
         sentences, citation_idxs, mask, token_id_types = sentences.to(device), citation_idxs.to(device), mask.to(device),token_id_types.to(device)
-        output = network(sentences, citation_idxs, mask, token_id_types, device=device)
+        output = network(sentences, citation_idxs, mask, token_id_types,output_matrix = output_matrix, device=device)
         # loss = F.cross_entropy(output, y, weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         
@@ -174,7 +210,7 @@ for epoch in range(n_epochs):
         sentences, citation_idxs, mask, token_id_types = sentences.to(device), citation_idxs.to(device), mask.to(device),token_id_types.to(device)
         # print(sentences[0:2])
         # print(token_id_types[0:2])
-        output = network(sentences, citation_idxs, mask, token_id_types, device=device)
+        output = network(sentences, citation_idxs, mask, token_id_types, output_matrix = output_matrix,device=device)
         # print(output.shape)
         # print(y)
         # print(output)
