@@ -135,6 +135,7 @@ bert_output = res[0]
 output_matrix = bert_output[torch.arange(bert_output.shape[0]), 0]
 
 print("generating output_matrix of shape")
+output_matrix.require_grad = False
 print(output_matrix.shape)
 # end of generate output_matrix
 def evaluate_model(network, data, data_object):

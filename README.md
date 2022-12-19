@@ -29,6 +29,8 @@ python3 bert_test.py
 
 this will run inference on acl test set
 
+
+git checkout semantic_augmentation
 ```
 To resume the session:
 screen -r model 
