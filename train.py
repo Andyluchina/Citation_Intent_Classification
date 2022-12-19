@@ -239,7 +239,7 @@ for epoch in range(n_epochs):
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         # print(loss)
         # print(loss)
-        loss.backward(retain_graph=True)
+        loss.backward()
         optimizer.step()
     
     # print("The training loss is ", train_loss.mean())
