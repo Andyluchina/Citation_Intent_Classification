@@ -90,7 +90,7 @@ optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
-n_epochs = 40
+n_epochs = 80
 class_factor = 1.5
 sum_factor = 0.8
 normalizing_factor = 0.5
@@ -117,7 +117,7 @@ output_sematics = [
    'Future: introduce additional work that can be done in the future'
 ]
 
-encoded_labels = tokenizer(output_sematics, padding = 'max_length', max_length = 5, return_tensors='pt')
+encoded_labels = tokenizer(output_sematics, padding = 'max_length', max_length = 15, return_tensors='pt')
 
 print(encoded_labels)
 
