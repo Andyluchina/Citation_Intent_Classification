@@ -109,12 +109,12 @@ print("Trainable parameters " ,pytorch_total_params)
 tokenizer = AutoTokenizer.from_pretrained('allenai/scibert_scivocab_uncased')
 
 output_sematics = [
-   'Background',
-   'Uses', 
+   'Background: introduce related information about a subject',
+   'Uses: introduce applications about a subject', 
    'Compare Or Contrast', 
    'Extends',
-   'Motivation', 
-   'Future'
+   'Motivation: introduce reasons why certain subject is important', 
+   'Future: introduce additional work that can be done in the future'
 ]
 
 encoded_labels = tokenizer(output_sematics, padding = 'max_length', max_length = 5, return_tensors='pt')
@@ -138,6 +138,8 @@ print("generating output_matrix of shape")
 output_matrix.require_grad = False
 output_matrix = output_matrix.to(device)
 print(output_matrix.shape)
+
+del scibert
 # end of generate output_matrix
 def evaluate_model(network, data, data_object):
     batch_size = 0
