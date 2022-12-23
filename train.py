@@ -174,7 +174,7 @@ def evaluate_model(network, data, data_object):
         y = y.to(device)
         sentences, citation_idxs, mask, token_id_types = x
         sentences, citation_idxs, mask, token_id_types = sentences.to(device), citation_idxs.to(device), mask.to(device),token_id_types.to(device)
-        output = network(sentences, citation_idxs, mask, token_id_types,output_matrix = output_matrix, device=device)
+        output = network(sentences, citation_idxs, mask, token_id_types, device=device)
         # loss = F.cross_entropy(output, y, weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         
@@ -231,7 +231,7 @@ for epoch in range(n_epochs):
         sentences, citation_idxs, mask, token_id_types = sentences.to(device), citation_idxs.to(device), mask.to(device),token_id_types.to(device)
         # print(sentences[0:2])
         # print(token_id_types[0:2])
-        output = network(sentences, citation_idxs, mask, token_id_types, output_matrix = output_matrix,device=device)
+        output = network(sentences, citation_idxs, mask, token_id_types, device=device)
         # print(output.shape)
         # print(y)
         # print(output)
