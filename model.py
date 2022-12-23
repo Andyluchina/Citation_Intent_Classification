@@ -85,6 +85,6 @@ class CustomBertClassifier(nn.Module):
         # output_matrix output_num(6) x bert_dim_size
 
         # x4 = self.linear3(x3)
-        x8 = self.logsoftmax(x7)
+        x8 = self.logsoftmax(x6)
         # print(torch.exp(x5))
         return x8
