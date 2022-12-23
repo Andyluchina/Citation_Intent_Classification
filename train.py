@@ -84,17 +84,6 @@ num_of_output = 6
 # loss_fn = nn.NLLLoss(weight=torch.tensor([1.0,2.735015773,2.842622951,13.76190476,11.40789474,14.45]).to(device))
 # 1	10.1829653	7.017391304	51.23809524	42.47368421	53.8
 # loss_fn = nn.NLLLoss(weight=torch.tensor([1.0,1.0,1.0,1.5,1.5,1.5]).to(device))
-loss_fn = nn.NLLLoss()
-
-optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001)
-# optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
-
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
-n_epochs = 80
-class_factor = 1.6
-sum_factor = 0.8
-normalizing_factor = 0.5
-accuracy_factor = 1.2
 
 
 
@@ -147,6 +136,20 @@ del scibert
 # end of generate output_matrix
 
 network = CustomBertClassifier(hidden_dim= 100, bert_dim_size=bert_dim_size, num_of_output=6, model_name=bertmodel_name, output_matrix = output_matrix)
+
+
+loss_fn = nn.NLLLoss()
+
+optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001)
+# optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
+
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
+n_epochs = 80
+class_factor = 1.6
+sum_factor = 0.8
+normalizing_factor = 0.5
+accuracy_factor = 1.2
+
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
 # for parameter in network.parameters():
