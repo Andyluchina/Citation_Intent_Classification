@@ -143,9 +143,9 @@ loss_fn = nn.NLLLoss()
 optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
+# scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
 n_epochs = 80
-class_factor = 2.1
+class_factor = 1.4
 sum_factor = 0.8
 normalizing_factor = 0.5
 accuracy_factor = 0.8
@@ -266,7 +266,7 @@ for epoch in range(n_epochs):
     # curr_f1 = evaluate_model(network, train_loader, train)
     print("dev loss and f1")
     curr_f1 = evaluate_model(network, dev_loader, dev)
-    scheduler.step(curr_f1)
+    # scheduler.step(curr_f1)
     if curr_f1 > best_f1:
         best_f1 = curr_f1
         torch.save(network.state_dict(), "bestmodel.npy")
