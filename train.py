@@ -77,7 +77,7 @@ test_loader = test.data_loader
 num_of_output = 6
 
 
-network = CustomBertClassifier(hidden_dim= 100, bert_dim_size=bert_dim_size, num_of_output=6, model_name=bertmodel_name)
+
 # loss_fn = nn.CrossEntropyLoss(weight=torch.tensor([1.0, 5.151702786,7.234782609,43.78947368,52.82539683,55.46666667]).to(device))
 # loss_fn = nn.CrossEntropyLoss(weight=torch.tensor([0.006, 0.031, 0.043,0.32, 0.26,0.335]).to(device))
 
@@ -91,18 +91,13 @@ optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001
 
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
 n_epochs = 80
-class_factor = 1.5
+class_factor = 1.6
 sum_factor = 0.8
 normalizing_factor = 0.5
 accuracy_factor = 1.2
 
 
-pytorch_total_params = sum(p.numel() for p in network.parameters())
-# for parameter in network.parameters():
-#     print(parameter)
-print("all number of params ", pytorch_total_params)
-pytorch_total_params = sum(p.numel() for p in network.parameters() if p.requires_grad)
-print("Trainable parameters " ,pytorch_total_params)
+
 
 
 # generate output_matrix
@@ -137,7 +132,7 @@ scibert = AutoModel.from_pretrained('allenai/scibert_scivocab_uncased')
 scibert.to(device)
 
 inputs = inputs.to(device)
-mask =mask.to(device)
+mask = mask.to(device)
 
 res = scibert(input_ids=inputs, attention_mask=mask)
 bert_output = res[0]
@@ -150,6 +145,16 @@ print(output_matrix.shape)
 
 del scibert
 # end of generate output_matrix
+
+network = CustomBertClassifier(hidden_dim= 100, bert_dim_size=bert_dim_size, num_of_output=6, model_name=bertmodel_name, output_matrix = output_matrix)
+
+pytorch_total_params = sum(p.numel() for p in network.parameters())
+# for parameter in network.parameters():
+#     print(parameter)
+print("all number of params ", pytorch_total_params)
+pytorch_total_params = sum(p.numel() for p in network.parameters() if p.requires_grad)
+print("Trainable parameters " ,pytorch_total_params)
+
 def evaluate_model(network, data, data_object):
     batch_size = 0
     f1s = []
@@ -248,7 +253,8 @@ for epoch in range(n_epochs):
         # loss = F.nll_loss(output, y, weight=torch.tensor([1.0, 500.151702786,700.234782609,4300.78947368,5200.82539683,5500.46666667]).to(device))
         # print(loss)
         # print(loss)
-        loss.backward(retain_graph=True)
+        # loss.backward(retain_graph=True)
+        loss.backward()
         optimizer.step()
     
     # print("The training loss is ", train_loss.mean())
