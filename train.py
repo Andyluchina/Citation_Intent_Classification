@@ -145,7 +145,7 @@ optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001
 
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
 n_epochs = 80
-class_factor = 1.2
+class_factor = 1.6
 sum_factor = 0.8
 normalizing_factor = 0.5
 accuracy_factor = 1.2
@@ -246,7 +246,7 @@ for epoch in range(n_epochs):
         # if epoch < 15:    
         # loss = loss_fn(output, y) + class_factor * ((torch.subtract(y, predictted_output) != 0).sum()) + sum_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output)))
 
-        loss = accuracy_factor * loss_fn(output, y) * torch.pow(torch.tensor(1.8) ,((torch.subtract(y, predictted_output) == 0).sum())/bz) + class_factor * torch.exp(((torch.subtract(y, predictted_output) != 0).sum())/bz) * torch.log(torch.square(torch.subtract(y, predictted_output)).sum())
+        loss = accuracy_factor * loss_fn(output, y) * torch.pow(torch.tensor(1.5) ,((torch.subtract(y, predictted_output) == 0).sum())/bz) + class_factor * torch.exp(((torch.subtract(y, predictted_output) != 0).sum())/bz) * torch.log(torch.square(torch.subtract(y, predictted_output)).sum())
 
         # loss = loss_fn(output, y) + torch.exp(class_factor * torch.sum(torch.absolute(torch.subtract(y, predictted_output))))
         # else:

@@ -26,7 +26,7 @@ class CustomBertClassifier(nn.Module):
                 param.requires_grad = False
         # self.lstm = nn.LSTM(input_size=lstm_hidden, hidden_size=lstm_hidden, num_layers=4, batch_first=True, dropout=0.25)
         encoder_layer = nn.TransformerEncoderLayer(d_model=lstm_hidden, nhead=4, dim_feedforward=100, dropout=0.3, batch_first=True)
-        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=3)
+        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=4)
         self.cos = nn.CosineSimilarity(dim=2, eps=1e-6)
         self.output_matrix = output_matrix
         self.output_matrix.requires_grad = False
