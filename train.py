@@ -129,7 +129,7 @@ output_matrix = bert_output[torch.arange(bert_output.shape[0]), 1]
 
 print("generating output_matrix of shape")
 output_matrix.require_grad = False
-output_matrix = output_matrix.to(device)
+output_matrix = output_matrix.to('cpu')
 print(output_matrix.shape)
 
 del scibert
