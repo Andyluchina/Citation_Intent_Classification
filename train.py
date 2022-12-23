@@ -125,7 +125,7 @@ mask = mask.to(device)
 
 res = scibert(input_ids=inputs, attention_mask=mask)
 bert_output = res[0]
-output_matrix = bert_output[torch.arange(bert_output.shape[0]), 1]
+output_matrix = bert_output[torch.arange(bert_output.shape[0]), 0]
 
 print("generating output_matrix of shape")
 # output_matrix.require_grad = False
@@ -140,7 +140,7 @@ network = CustomBertClassifier(hidden_dim= 100, bert_dim_size=bert_dim_size, num
 
 loss_fn = nn.NLLLoss()
 
-optimizer = torch.optim.Adam(network.parameters(), weight_decay = 2e-5, lr=0.001)
+optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
@@ -148,7 +148,7 @@ n_epochs = 80
 class_factor = 2.1
 sum_factor = 0.8
 normalizing_factor = 0.5
-accuracy_factor = 1.1
+accuracy_factor = 0.8
 
 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
