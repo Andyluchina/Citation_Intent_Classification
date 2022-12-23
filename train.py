@@ -64,8 +64,8 @@ else:
 
 repeat = [1,1,1,5,3,2]
 
-train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
-# train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name, repeat=repeat)
+# train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
+train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name, repeat=repeat)
 train_loader = train.data_loader
 
 dev = bert_process(dev_data, batch_size=bz, pretrained_model_name=bertmodel_name)
@@ -108,16 +108,25 @@ print("Trainable parameters " ,pytorch_total_params)
 # generate output_matrix
 tokenizer = AutoTokenizer.from_pretrained('allenai/scibert_scivocab_uncased')
 
+# output_sematics = [
+#    'Background: introduce related information about a subject',
+#    'Uses: introduce applications about a subject', 
+#    'Compare Or Contrast: compare the similarities and differences between the current subject and something else', 
+#    'Extends: introduces additions and extensions to the current subject',
+#    'Motivation: introduce reasons why certain subject is important', 
+#    'Future: introduce additional work that can be done in the future'
+# ]
+
 output_sematics = [
-   'Background: introduce related information about a subject',
-   'Uses: introduce applications about a subject', 
-   'Compare Or Contrast: compare the similarities and differences between the current subject and something else', 
-   'Extends: introduces additions and extensions to the current subject',
-   'Motivation: introduce reasons why certain subject is important', 
-   'Future: introduce additional work that can be done in the future'
+   'Background',
+   'Uses', 
+   'Compare Or Contrast', 
+   'Extends',
+   'Motivation', 
+   'Future'
 ]
 
-encoded_labels = tokenizer(output_sematics, padding = 'max_length', max_length = 20, return_tensors='pt')
+encoded_labels = tokenizer(output_sematics, padding = 'max_length', max_length = 6, return_tensors='pt')
 
 print(encoded_labels)
 

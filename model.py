@@ -8,7 +8,7 @@ from transformers import AutoModel
 
 
 class CustomBertClassifier(nn.Module):
-    def __init__(self, hidden_dim= 100, bert_dim_size=768, num_of_output=6, lstm_hidden = 160,proj_size=100, model_name = "bert-base-uncased"):
+    def __init__(self, hidden_dim= 100, bert_dim_size=768, num_of_output=6, lstm_hidden = 100,proj_size=100, model_name = "bert-base-uncased"):
         """
         """
         super(CustomBertClassifier, self).__init__()
@@ -27,6 +27,7 @@ class CustomBertClassifier(nn.Module):
         # self.lstm = nn.LSTM(input_size=lstm_hidden, hidden_size=lstm_hidden, num_layers=4, batch_first=True, dropout=0.25)
         encoder_layer = nn.TransformerEncoderLayer(d_model=lstm_hidden, nhead=4, dim_feedforward=100, dropout=0.3, batch_first=True)
         self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=3)
+        self.cos = nn.CosineSimilarity(dim=2, eps=1e-6)
 
     def forward(self, sentences, citation_idxs, mask, token_type_id=None, output_matrix = None ,device="mps"):
         """
@@ -75,8 +76,9 @@ class CustomBertClassifier(nn.Module):
         # x3 batch x bert_dim_size
         x4 = torch.unsqueeze(x3, dim = 1)
         x4_1 = output_matrix.repeat(x4.shape[0] , 1)
-        x5 = torch.subtract(x4_1, x4)
-        x6 = torch.sum(torch.square(x5), 2)
+        # x5 = torch.subtract(x4_1, x4)
+        # x6 = torch.sum(torch.square(x5), 2)
+        x6 = self.cos(x4_1, x4)
         # x6 batch x output_num(6)
         x7 = torch.neg(x6)
         # output_matrix output_num(6) x bert_dim_size
