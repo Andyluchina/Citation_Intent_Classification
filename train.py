@@ -62,7 +62,7 @@ else:
     bert_dim_size = 1024
 
 
-repeat = [1,1,1,7,5,2]
+repeat = [1,1,1,7,7,2]
 
 train = bert_process(train_data, batch_size=bz, pretrained_model_name=bertmodel_name)
 # train = bert_process(train_data, train_data_sci ,batch_size=bz, pretrained_model_name=bertmodel_name, repeat=repeat)
@@ -125,7 +125,7 @@ mask = mask.to(device)
 
 res = scibert(input_ids=inputs, attention_mask=mask)
 bert_output = res[0]
-output_matrix = bert_output[torch.arange(bert_output.shape[0]), 0]
+output_matrix = bert_output[torch.arange(bert_output.shape[0]), 1]
 
 print("generating output_matrix of shape")
 # output_matrix.require_grad = False
@@ -143,7 +143,7 @@ loss_fn = nn.NLLLoss()
 optimizer = torch.optim.Adam(network.parameters(), weight_decay = 1e-5, lr=0.001)
 # optimizer = torch.optim.Adam(network.parameters(), lr=0.01)
 
-# scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.5, verbose = True)
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience = 2, factor = 0.8, verbose = True)
 n_epochs = 200
 class_factor = 1.4
 sum_factor = 0.8
@@ -266,7 +266,7 @@ for epoch in range(n_epochs):
     # curr_f1 = evaluate_model(network, train_loader, train)
     print("dev loss and f1")
     curr_f1 = evaluate_model(network, dev_loader, dev)
-    # scheduler.step(curr_f1)
+    scheduler.step(curr_f1)
     if curr_f1 > best_f1:
         best_f1 = curr_f1
         torch.save(network.state_dict(), "bestmodel.npy")
