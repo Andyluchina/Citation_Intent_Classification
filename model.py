@@ -81,7 +81,7 @@ class CustomBertClassifier(nn.Module):
         # x6 = torch.sum(torch.square(x5), 2)
         x6 = self.cos(x4_1, x4)
         # x6 batch x output_num(6)
-        x7 = torch.neg(x6)
+        # x7 = torch.neg(x6)
         # output_matrix output_num(6) x bert_dim_size
 
         # x4 = self.linear3(x3)
